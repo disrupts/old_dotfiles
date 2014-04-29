@@ -13,6 +13,11 @@ All vim plugins (including [Pathogen][pathogen] itself is contained in its own g
 
 The <code>bootstrap.sh</code> script comes from [Mathias Bynens dotfiles][mathias]
 
+Todo
+----
+  * add mapping to .vimrc to make it toggle ??? too, when toggling list! (viewing tabs and returns)
+  * add zshrc
+
 [installrepo]: https://github.com/disrupts/installs
 [mathias]:     https://github.com/mathiasbynens/dotfiles
 [pathogen]:    https://github.com/tpope/vim-pathogen
