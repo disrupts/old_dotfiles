@@ -87,10 +87,8 @@ map <C-k> <C-w>K
 map <C-l> <C-w>L
 
 " Simplify movement around soft-wrapped lines    {{{2
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+map <C-j> gj
+map <C-k> gk
 
 " Opening files in the same path as current file {{{2
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
