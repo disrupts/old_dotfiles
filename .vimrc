@@ -28,7 +28,7 @@ set history=5000
 set showcmd
 set nojoinspaces
 set listchars=tab:▸\ ,eol:¬ " set new tab and return symbols
-set foldlevelstart=99       " folding max out by default
+set foldlevelstart=0        " folding max out by default
 set noswapfile              " disables swap file - BAD
 if has('mouse')             " Mouse disable in Insert mode
   set mouse=nv  
