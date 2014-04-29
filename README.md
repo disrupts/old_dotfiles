@@ -15,7 +15,7 @@ The <code>bootstrap.sh</code> script comes from [Mathias Bynens dotfiles][mathia
 
 Todo
 ----
-  * add mapping to .vimrc to make it toggle ??? too, when toggling list! (viewing tabs and returns)
+  * add mapping to .vimrc to make it toggle the 81st coloumn marker too, when toggling list! (viewing tabs and returns - <leader>l)
   * modify bootstrap.sh to make it update vim plugins (git submodules)
   * add zshrc
 
