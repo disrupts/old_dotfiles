@@ -9,13 +9,14 @@ This is the usual workflow when I format, change of OS or fully upgrade a machin
   * pull this dotfiles
   * Enjoy 
 
-All vim plugins (including [Pathogen][pathogen] itself is contained in its own git submodule!
+All vim plugins (including [Pathogen][pathogen] itself) is contained in its own git submodule!
 
 The <code>bootstrap.sh</code> script comes from [Mathias Bynens dotfiles][mathias]
 
 Todo
 ----
   * add mapping to .vimrc to make it toggle ??? too, when toggling list! (viewing tabs and returns)
+  * modify bootstrap.sh to make it update vim plugins (git submodules)
   * add zshrc
 
 [installrepo]: https://github.com/disrupts/installs
