@@ -7,3 +7,6 @@
 [submodule ".vim/bundle/markdown-folding"]
 	path = .vim/bundle/markdown-folding
 	url = https://github.com/nelstrom/vim-markdown-folding.git
+[submodule ".vim/bundle/tabular"]
+	path = .vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git

@@ -102,6 +102,17 @@ map <leader>et :tabe %%
 "vnoremap <C-S> <C-C>:update<CR>
 "inoremap <C-S> <C-O>:update<CR>
 
+" Tabular mappings                               {{{2
+" press '<leader> a' and the symbol to map
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+  nmap <Leader>a| :Tabularize /|<CR>
+  vmap <Leader>a| :Tabularize /|<CR>
+endif
+
 " Colouscheme                                    {{{1
 colorscheme molokai
 
