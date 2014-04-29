@@ -102,14 +102,8 @@ map <leader>et :tabe %%
 "vnoremap <C-S> <C-C>:update<CR>
 "inoremap <C-S> <C-O>:update<CR>
 
-" Colouschemes - UNFINISHED                      {{{1
-au BufEnter *.xml colorscheme slate
-au BufEnter *.rb  colorscheme slate
-au BufEnter *.c   colorscheme molokai
-au BufEnter *.h   colorscheme molokai
-au BufEnter *.cpp colorscheme slate
-au BufEnter *.md  colorscheme molokai
-au BufEnter *.markdown colorscheme molokai
+" Colouscheme                                    {{{1
+colorscheme molokai
 
 " Executed when closing the buffer               {{{1
 " Strip trailing whitespace                      {{{2

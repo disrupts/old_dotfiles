@@ -9,9 +9,11 @@ colorscheme blue
 " and to dark blue if it is xml file"
 au BufEnter *.xml colorscheme darkblue   
 au BufEnter *.rb  colorscheme slate
-au BufEnter *.c   colorscheme desert
-au BufEnter *.h   colorscheme desert
+au BufEnter *.c   colorscheme molokai
+au BufEnter *.h   colorscheme molokai
 au BufEnter *.cpp colorscheme desert
+au BufEnter *.md  colorscheme molokai
+au BufEnter *.markdown  colorscheme molokai
 	
 
 " MacVim Defaults - WHAT ARE THEY?               {{{1
