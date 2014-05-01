@@ -117,6 +117,9 @@ map <leader>et :tabe %%
   "vmap <leader>a<bar> :Tabularize /\|<CR>
 "endif
 
+" Gundo mappings                                 {{{2
+nnoremap <leader>u :GundoToggle<CR>
+
 " Colouscheme                                    {{{1
 colorscheme molokai
 
