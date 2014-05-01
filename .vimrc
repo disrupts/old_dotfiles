@@ -49,7 +49,8 @@ inoremap <left>		<nop>
 inoremap <right>	<nop>
 
 " un-highlight with Delete key - already ctrl-l {{{2
-nmap <silent> <BS> :nohlsearch
+nmap <silent> <BS> :nohlsearch<CR>
+" BAD should I remove <silent>
 
 " use spacebar to fold                           {{{2
 nnoremap <Space> za
@@ -79,6 +80,7 @@ set ts=4 sts=2 sw=2 noexpandtab
 
 " Spell Checking                                 {{{2
 nmap <silent> <leader>s :set spell!<CR>
+" BAD should I remove <silent>
 
 " Simplify movement around windows               {{{2
 map <C-h> <C-w>H
@@ -104,14 +106,16 @@ map <leader>et :tabe %%
 
 " Tabular mappings                               {{{2
 " press '<leader> a' and the symbol to map
-if exists(":Tabularize")
-  nmap <Leader>a= :Tabularize /=<CR>
-  vmap <Leader>a= :Tabularize /=<CR>
-  nmap <Leader>a: :Tabularize /:\zs<CR>
-  vmap <Leader>a: :Tabularize /:\zs<CR>
-  nmap <Leader>a| :Tabularize /|<CR>
-  vmap <Leader>a| :Tabularize /|<CR>
-endif
+" added the following to /after/plugin/Tabular.vim
+
+"if exists(":Tabularize")
+  "nmap <leader>a= :Tabularize /=<CR>
+  "vmap <leader>a= :Tabularize /=<CR>
+  "nmap <leader>a: :Tabularize /:\zs<CR>
+  "vmap <leader>a: :Tabularize /:\zs<CR>
+  "nmap <leader>a<bar> :Tabularize /\|<CR>
+  "vmap <leader>a<bar> :Tabularize /\|<CR>
+"endif
 
 " Colouscheme                                    {{{1
 colorscheme molokai
