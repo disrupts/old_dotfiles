@@ -120,7 +120,17 @@ map <leader>et :tabe %%
 " Gundo mappings                                 {{{2
 nnoremap <leader>u :GundoToggle<CR>
 
-" Colouscheme                                    {{{1
+" Folding Methods                                {{{1
+au BufEnter *.c   set foldmethod=syntax
+au BufEnter *.h   set foldmethod=syntax
+au BufEnter *.cpp set foldmethod=syntax
+au BufEnter *.hs  set foldmethod=syntax
+au BufEnter *.rb  set foldmethod=syntax
+au BufEnter *.py  set foldmethod=syntax
+au BufEnter *.sh  set foldmethod=syntax
+au BufEnter *.xml set foldmethod=syntax
+
+" Colourscheme                                    {{{1
 colorscheme molokai
 
 " Executed when closing the buffer               {{{1
