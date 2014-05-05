@@ -73,11 +73,6 @@ vnoremap <C-V>     v
 " Shortcut to rapidly toggle `set list`          {{{2
 nmap <leader>l :set list!<CR>
 
-" Tab config for every file                      {{{2
-"   * 2 chars softabs
-"   * 4 chars hardtabs
-set ts=4 sts=2 sw=2 noexpandtab
-
 " Spell Checking                                 {{{2
 nmap <silent> <leader>s :set spell!<CR>
 " BAD should I remove <silent>
@@ -129,6 +124,16 @@ au BufEnter *.rb  set foldmethod=syntax
 au BufEnter *.py  set foldmethod=syntax
 au BufEnter *.sh  set foldmethod=syntax
 au BufEnter *.xml set foldmethod=syntax
+
+" Indent Mode (Tab configuration)                {{{1
+" Tab config for every file                      {{{2
+"   * 2 chars softabs
+"   * 4 chars hardtabs
+set ts=4 sts=2 sw=2 noexpandtab
+" This one will be used on C, C++ files!
+
+" Tab config for ruby                            {{{2
+au BufEnter *.rb set ts=2 sts=2 sw=2 expandtab
 
 " Colourscheme                                    {{{1
 colorscheme molokai
