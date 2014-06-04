@@ -14,7 +14,6 @@ filetype plugin indent on
 "   syntax on  		  
 " endif
 
-
 " Preferences                                    {{{1
 " Esc key and Leader                             {{{2
 map! ñ <Esc>
@@ -28,10 +27,11 @@ set history=5000
 set showcmd
 set nojoinspaces
 set listchars=tab:▸\ ,eol:¬ " set new tab and return symbols
-set foldlevelstart=0        " folding max out by default
+set foldlevelstart=9999     " folding max out by default
 set noswapfile              " disables swap file - BAD
 if has('mouse')             " Mouse disable in Insert mode
-  set mouse=nv  
+  set mouse=a "re-enable to test the setting
+  "set mouse=nv  
 endif
 set wrap                    " soft wraping
 set linebreak               " remember to toggle nolist with <leader>-l
@@ -55,20 +55,11 @@ nmap <silent> <BS> :nohlsearch<CR>
 " use spacebar to fold                           {{{2
 nnoremap <Space> za
 
-" Mark 81st column visible                       {{{2
-highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%81v', 100)
-
 " Enter BLOCK-VISUAL by default                  {{{2
 nnoremap    v   <C-V>
 nnoremap <C-V>     v
 vnoremap    v   <C-V>
 vnoremap <C-V>     v
-
-" Go to last location when opening a file        {{{2
- autocmd BufReadPost *  if line("'\"") > 1 && line("'\"") <= line("$")
-                   \|     exe "normal! g`\""
-                   \|  endif
 
 " Shortcut to rapidly toggle `set list`          {{{2
 nmap <leader>l :set list!<CR>
@@ -135,10 +126,23 @@ set ts=4 sts=2 sw=2 noexpandtab
 " Tab config for ruby                            {{{2
 au BufEnter *.rb set ts=2 sts=2 sw=2 expandtab
 
-" Colourscheme                                    {{{1
+" Colourscheme                                   {{{1
 colorscheme molokai
 
-" Executed when closing the buffer               {{{1
+" Mark 81st column visible                       {{{1
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
+
+" Executed when opening & closing a buffer       {{{1
+" Go to last location when opening a file        {{{2
+ autocmd BufReadPost *  if line("'\"") > 1 && line("'\"") <= line("$")
+                   \|     exe "normal! g`\""
+                   \|  endif
+
+" Saves the state of foldings and reopens them   {{{2
+au BufWinLeave * mkview
+au BufWinEnter * silent loadview
+
 " Strip trailing whitespace                      {{{2
 function! <SID>StripTrailingWhitespaces()
   " Preparation: save last search, and cursor position.
