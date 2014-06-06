@@ -48,6 +48,18 @@ inoremap <down>		<nop>
 inoremap <left>		<nop>
 inoremap <right>	<nop>
 
+" disable arrow keys in normal mode              {{{2
+nnoremap <up>		<nop>
+nnoremap <down>		<nop>
+nnoremap <left>		<nop>
+nnoremap <right>	<nop>
+
+" disable arrow keys in visual mode              {{{2
+vnoremap <up>		<nop>
+vnoremap <down>		<nop>
+vnoremap <left>		<nop>
+vnoremap <right>	<nop>
+
 " un-highlight with Delete key - already ctrl-l {{{2
 nmap <silent> <BS> :nohlsearch<CR>
 " BAD should I remove <silent>
@@ -62,21 +74,43 @@ vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
 " Shortcut to rapidly toggle `set list`          {{{2
-nmap <leader>l :set list!<CR>
+nnoremap <leader>l :set list!<CR>
 
 " Spell Checking                                 {{{2
-nmap <silent> <leader>s :set spell!<CR>
+nnoremap <leader>s :set spell!<CR>
 " BAD should I remove <silent>
+"nmap <silent> <leader>s :set spell!<CR>
 
-" Simplify movement around windows               {{{2
-map <C-h> <C-w>H
-map <C-j> <C-w>J
-map <C-k> <C-w>K
-map <C-l> <C-w>L
+" Change Spell Chacking Language                 {{{2
+nnoremap <leader>sgb :set spelllang=en_gb<CR>
+nnoremap <leader>ses :set spelllang=es_es<CR>
+nnoremap <leader>sfr :set spelllang=fr<CR>
 
-" Simplify movement around soft-wrapped lines    {{{2
-map <C-j> gj
-map <C-k> gk
+" Movement & navigation mappings                 {{{2
+" moved to /after/plugin/sensible.vim
+
+"runtime! plugin/sensible.vim
+" this doesn't help, so the remap comes from somewhere else, 
+" & somehow, the pluggin changes some colours! the magenta marker for char 80
+" is grey... not visible with some colorschemes in grafical vim
+
+" Simplify movement around windows               {{{3
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Simplify changing window arrangement           {{{3
+nnoremap <C-S-h> <C-w>H
+nnoremap <C-S-j> <C-w>J
+nnoremap <C-S-k> <C-w>K
+nnoremap <C-S-l> <C-w>L
+
+" Simplify movement around soft-wrapped lines    {{{3
+nnoremap ¶ gj
+nnoremap § gk
+nnoremap <M-h> h 
+nnoremap <A-l> l 
 
 " Opening files in the same path as current file {{{2
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
@@ -140,8 +174,9 @@ call matchadd('ColorColumn', '\%81v', 100)
                    \|  endif
 
 " Saves the state of foldings and reopens them   {{{2
-au BufWinLeave * mkview
-au BufWinEnter * silent loadview
+" BROKEN
+"au BufWinLeave * mkview
+"au BufWinEnter * silent loadview
 
 " Strip trailing whitespace                      {{{2
 function! <SID>StripTrailingWhitespaces()
