@@ -101,10 +101,11 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Simplify changing window arrangement           {{{3
-nnoremap <C-S-h> <C-w>H
-nnoremap <C-S-j> <C-w>J
-nnoremap <C-S-k> <C-w>K
-nnoremap <C-S-l> <C-w>L
+" vim can't distinguish ctrl-letter from ctrl-shift-letter
+"nnoremap <C-S-h> <C-w>H
+"nnoremap <C-S-j> <C-w>J
+"nnoremap <C-S-k> <C-w>K
+"nnoremap <C-S-l> <C-w>L
 
 " Simplify movement around soft-wrapped lines    {{{3
 nnoremap ¶ gj
