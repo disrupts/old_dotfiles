@@ -90,13 +90,6 @@ nnoremap <leader>ses :set spelllang=es_es<CR>
 nnoremap <leader>sfr :set spelllang=fr<CR>
 
 " Movement & navigation mappings                 {{{2
-" moved to /after/plugin/sensible.vim
-
-"runtime! plugin/sensible.vim
-" this doesn't help, so the remap comes from somewhere else,
-" & somehow, the pluggin changes some colours! the magenta marker for char 80
-" is grey... not visible with some colorschemes in grafical vim
-
 " Simplify movement around windows               {{{3
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -115,6 +108,12 @@ nnoremap ¶ gj
 nnoremap § gk
 nnoremap <M-h> h
 nnoremap <A-l> l
+
+" Simplify movement around tabs                  {{{3
+nnoremap <leader>n :tabprevious<CR>
+inoremap <leader>n <esc>:tabprevious<CR>
+nnoremap <leader>m :tabnext<CR>
+inoremap <leader>m <esc>:tabnext<CR>
 
 " Opening files in the same path as current file {{{2
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
@@ -192,3 +191,9 @@ endfunction
 
 nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
 autocmd BufWritePre *.c,*.h,*.rb,*.py,*.js :call <SID>StripTrailingWhitespaces()
+
+" Notes                                          {{{1
+
+"runtime! plugin/sensible.vim
+" & somehow, the pluggin changes some colours! the magenta marker for char 80
+" is grey... not visible with some colorschemes in grafical vim
