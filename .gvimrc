@@ -1,5 +1,5 @@
 " vim: foldmethod=marker
- 
+
 " My mods to gvimrc                              {{{1
 " Preferences                                    {{{2
 set guioptions-=T   "remove the toolbar
@@ -7,14 +7,16 @@ set guioptions-=T   "remove the toolbar
 " Default colour for MacVim to blue!
 colorscheme blue
 " and to dark blue if it is xml file"
-au BufEnter *.xml colorscheme darkblue   
-au BufEnter *.rb  colorscheme slate
-au BufEnter *.c   colorscheme molokai
-au BufEnter *.h   colorscheme molokai
-au BufEnter *.cpp colorscheme desert
-au BufEnter *.md  colorscheme molokai
-au BufEnter *.markdown  colorscheme molokai
-	
+au FileType xml      colorscheme darkblue
+au FileType ruby     colorscheme slate
+au FileType c        colorscheme molokai
+"au BufEnter *.h     colorscheme molokai
+au FileType cpp      colorscheme desert
+au FileType markdown colorscheme molokai
+" stored in case markdown detection is not good enough
+"au BufEnter *.md  colorscheme molokai
+"au BufEnter *.markdown  colorscheme molokai
+
 
 " MacVim Defaults - WHAT ARE THEY?               {{{1
 

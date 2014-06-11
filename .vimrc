@@ -11,7 +11,7 @@ filetype plugin indent on
 " set ruler
 " set hlsearch            " highlight search
 " if !exists("syntax_on") " syntax highlighting
-"   syntax on  		  
+"   syntax on
 " endif
 
 " Preferences                                    {{{1
@@ -31,7 +31,7 @@ set foldlevelstart=9999     " folding max out by default
 set noswapfile              " disables swap file - BAD
 if has('mouse')             " Mouse disable in Insert mode
   set mouse=a "re-enable to test the setting
-  "set mouse=nv  
+  "set mouse=nv
 endif
 set wrap                    " soft wraping
 set linebreak               " remember to toggle nolist with <leader>-l
@@ -40,6 +40,9 @@ set ignorecase              " ignore case
 set smartcase               " smart case
 set hlsearch                " highligh searches
 set spelllang=en_gb         " set language to british english
+
+" Omni-completion                                {{{2
+set omnifunc=syntaxcomplete#Complete
 
 " Mappings                                       {{{1
 " disable arrow keys in insert mode              {{{2
@@ -90,7 +93,7 @@ nnoremap <leader>sfr :set spelllang=fr<CR>
 " moved to /after/plugin/sensible.vim
 
 "runtime! plugin/sensible.vim
-" this doesn't help, so the remap comes from somewhere else, 
+" this doesn't help, so the remap comes from somewhere else,
 " & somehow, the pluggin changes some colours! the magenta marker for char 80
 " is grey... not visible with some colorschemes in grafical vim
 
@@ -110,8 +113,8 @@ nnoremap <C-l> <C-w>l
 " Simplify movement around soft-wrapped lines    {{{3
 nnoremap ¶ gj
 nnoremap § gk
-nnoremap <M-h> h 
-nnoremap <A-l> l 
+nnoremap <M-h> h
+nnoremap <A-l> l
 
 " Opening files in the same path as current file {{{2
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
@@ -141,16 +144,6 @@ map <leader>et :tabe %%
 " Gundo mappings                                 {{{2
 nnoremap <leader>u :GundoToggle<CR>
 
-" Folding Methods                                {{{1
-au BufEnter *.c   set foldmethod=syntax
-au BufEnter *.h   set foldmethod=syntax
-au BufEnter *.cpp set foldmethod=syntax
-au BufEnter *.hs  set foldmethod=syntax
-au BufEnter *.rb  set foldmethod=syntax
-au BufEnter *.py  set foldmethod=syntax
-au BufEnter *.sh  set foldmethod=syntax
-au BufEnter *.xml set foldmethod=syntax
-
 " Indent Mode (Tab configuration)                {{{1
 " Tab config for every file                      {{{2
 "   * 2 chars softabs
@@ -158,8 +151,13 @@ au BufEnter *.xml set foldmethod=syntax
 set ts=4 sts=2 sw=2 noexpandtab
 " This one will be used on C, C++ files!
 
-" Tab config for ruby                            {{{2
-au BufEnter *.rb set ts=2 sts=2 sw=2 expandtab
+" FileType detection                             {{{1
+" Markdown                                       {{{2
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+" *.markdown is already detected
+
+" C header files - instead of C++                {{{2
+autocmd BufNewFile,BufReadPost *.h set filetype=c
 
 " Colourscheme                                   {{{1
 colorscheme molokai
