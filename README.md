@@ -13,12 +13,11 @@ All vim plugins (including [Pathogen][pathogen] itself) is contained in its own 
 
 The <code>bootstrap.sh</code> script comes from [Mathias Bynens dotfiles][mathias]
 
+I though of updating submodules (vim plugins) automatically after rsyncing files to home directory but it is too dangerous for me.
+
 Todo
 ----
-  * solve tabbing issues, no hard tabs for ruby or python¿ keep the way it is for C (hard tabs + soft tabs for wrapping lines
   * add mapping to .vimrc to make it toggle the 81st column marker too, when toggling list! (viewing tabs and returns - <leader>l)
-  * modify bootstrap.sh to make it update vim plugins (git submodules)
-  * add zshrc
 
 [installrepo]: https://github.com/disrupts/installs
 [mathias]:     https://github.com/mathiasbynens/dotfiles
