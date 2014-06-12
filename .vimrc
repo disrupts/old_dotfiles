@@ -165,6 +165,12 @@ colorscheme molokai
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
 
+" Powerline symbols!                             {{{1
+" I should add some if statement in case the plugin is not there
+let g:airline_powerline_fonts = 1
+let g:airline_theme           = 'badwolf'
+"let g:airline_theme           = 'powerlineish'
+
 " Executed when opening & closing a buffer       {{{1
 " Go to last location when opening a file        {{{2
  autocmd BufReadPost *  if line("'\"") > 1 && line("'\"") <= line("$")
