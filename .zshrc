@@ -97,6 +97,7 @@ alias dvtm="dvtm -m '^a'"
 
 # python3 is too dificult to type # {{{2
 alias python="python3"
+alias pip="pip3"
 
 # sudo configuration ############## {{{2
 # (i'll end up using only su)
