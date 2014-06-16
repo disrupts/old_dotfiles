@@ -5,7 +5,6 @@
 Pry.config.editor = "vim"
 Pry.config.auto_indent = true
 Pry.config.color = true
-Pry.config.history.file = "~/pry_history"
 
 # Awesome Print   {{{1
 begin
