@@ -113,10 +113,11 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 # Mac OS X PATH ################### {{{2
 # instructions http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/texbin:~/bin:/usr/bin:/usr/sbin:/bin:/sbin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/texbin:~/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/X11/bin/:$PATH"
 # ruby gems:   /usr/local/opt/ruby/bin
 # LaTex stuff: /usr/texbin
 # brew:        /usr/local/bin /usr/local/sbin
+# X (Mac os x): /usr/X11/bin/
 
 # Brew autocompletion & RVM ?? #### {{{1
 fpath=($HOME/.zsh/func $fpath)
