@@ -14,6 +14,7 @@ au FileType c        colorscheme molokai
 "au BufEnter *.h     colorscheme molokai
 au FileType cpp      colorscheme desert
 au FileType markdown colorscheme molokai
+au FileType python   colorscheme molokai
 " stored in case markdown detection is not good enough
 "au BufEnter *.md  colorscheme molokai
 "au BufEnter *.markdown  colorscheme molokai
