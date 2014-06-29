@@ -37,3 +37,6 @@
 [submodule ".vim/bundle/rbenv"]
 	path = .vim/bundle/rbenv
 	url = https://github.com/tpope/vim-rbenv.git
+[submodule ".vim/bundle/jpythonfold"]
+	path = .vim/bundle/jpythonfold
+	url = https://github.com/vim-scripts/jpythonfold.vim
