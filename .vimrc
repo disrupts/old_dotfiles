@@ -158,18 +158,20 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " C header files - instead of C++                {{{2
 autocmd BufNewFile,BufReadPost *.h set filetype=c
 
-" Colourscheme                                   {{{1
+" Visuals                                        {{{1
+" Colourscheme                                   {{{2
 colorscheme molokai
 
-" Mark 81st column visible                       {{{1
+" Mark 81st column visible                       {{{2
 highlight ColorColumn ctermbg=magenta
 call matchadd('ColorColumn', '\%81v', 100)
 
-" Powerline symbols!                             {{{1
+" Powerline symbols!                             {{{2
 " I should add some if statement in case the plugin is not there
 let g:airline_powerline_fonts = 1
 let g:airline_theme           = 'badwolf'
 "let g:airline_theme           = 'powerlineish'
+set noshowmode
 
 " Executed when opening & closing a buffer       {{{1
 " Go to last location when opening a file        {{{2
