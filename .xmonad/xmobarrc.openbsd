@@ -1,0 +1,22 @@
+Config { 
+  font = "xft:Inconsolata:size=8:antialias=true",
+  bgColor = "black",
+  fgColor = "#007BB8",
+  position = TopW L 95,
+  lowerOnStart = True,
+  commands = [  
+    --Run Network "wlan0" ["-L","0","-H","300","--normal","green","--high","red"] 10,
+    --Run Memory ["-t", "Mem; <usedratio>%"] 10,
+    Run Com "uname" ["-o","-r"] "" 36000,
+    Run Com ".xmonad/xmobarcpu.openbsd"     [] "cpu"     10,
+    Run Date "%a %_d %b %H:%M:%S"              "date"    10,
+    Run Com ".xmonad/xmobarvol.openbsd"     [] "volume"  10,
+    Run Com ".xmonad/xmobarwifi.openbsd"    [] "wifinet" 10,
+    Run Com ".xmonad/xmobarbattery.openbsd" [] "battery" 10,
+	Run Com ".xmonad/xmobartemp.openbsd"    [] "temp" 10,
+    Run StdinReader
+  ],
+  sepChar  = "%",
+  alignSep = "}{",
+  template = " %StdinReader% }{ %cpu% %temp% memory | wlan0 | %wifinet% %volume% %battery% <fc=#ee9f00>%date%</fc> | "
+  }

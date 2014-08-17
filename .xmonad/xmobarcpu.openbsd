@@ -1,0 +1,35 @@
+#!/bin/sh
+
+#idle=$(top -1 | grep 'All CPU' | cut -d " " -f 15| cut -d "%" -f1)
+#idle1=$(top | grep 'CPU1 states:' | sed 's/.*nice..//; s/.sys.*//' | cut -d "%" -f1)
+
+#idle0=$(systat -B cpu | grep '%' | grep '0 ' | cut -d " " -f 60 | cut -d "%" -f1)
+#idle1=$(systat -B cpu | grep '%' | grep '1 ' | cut -d " " -f 60 | cut -d "%" -f1)
+
+#cpu=$(echo 'scale=2; 200 -' $idle0 '-' $idle1 | bc)
+#cpu=$(echo 'scale=2; 100 -' $idle | bc)
+
+#echo "idle: `echo $idle`" # DEBUG
+#echo "idle0: `echo $idle0`" # DEBUG
+#echo "idle1: `echo $idle1`" # DEBUG
+#echo "cpu: `echo $cpu`" # DEBUG
+
+#cpu=$(systat -B | grep Load | cut -d " " -f 11)
+#cpu=$(systat -b cpu | grep Load | cut -d " " -f 11)
+#cpu=$(systat -B cpu | grep Load | cut -d " " -f 11)
+
+cpu=50
+
+# could be 3
+if test $cpu < 10.0
+then                   # GREEN
+  echo "cpu:<fc=#00ff00>" $cpu "</fc>% |"
+elif test $cpu < 50.0
+then                   # NORMAL
+  echo "cpu:" $cpu "% |"
+elif test $cpu < 75.0
+then                   # YELLOW-ORANGE
+  echo "cpu:<fc=#ffdd00>" $cpu "</fc>% |"
+else                   # RED
+  echo "cpu:<fc=#ff0000>" $cpu "</fc>% |"
+fi

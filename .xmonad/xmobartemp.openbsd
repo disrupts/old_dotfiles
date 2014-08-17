@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+from subprocess import check_output
+
+out = check_output(["sysctl", "hw.sensors.cpu0"])
+out = str(out, encoding='utf8')
+out = out.split('=')[1]
+out = out.split(' ')[0]
+
+temp = float(out)
+
+GREEN         = "#00ff00"
+YELLOW_ORANGE = "#ffdd00"
+RED           = "#ff0000"
+
+if temp < 45.0:
+    print("<fc=",GREEN,">", temp, " C</fc> |",sep='',end='')
+elif temp < 55.0:
+    print(temp," C |",sep='',end='')
+elif temp < 65.0:
+    print("<fc=",YELLOW_ORANGE,">", temp, " C</fc> |",sep='',end='')
+else:
+    print("<fc=",RED,">", temp, " C</fc> |",sep='',end='')

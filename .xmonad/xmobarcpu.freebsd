@@ -1,0 +1,19 @@
+#!/bin/sh
+
+idle=$(ps aux | grep idle | grep root | cut -w -f3)
+
+cpu=$(echo '(200.0 -' $idle')/2.0' | bc)
+
+# could be 3
+if test $cpu -le 10
+then                   # GREEN
+  echo "cpu:<fc=#00ff00>" $cpu "</fc>% |"
+elif test $cpu -le 50
+then                   # NORMAL
+  echo "cpu:" $cpu "% |"
+elif test $cpu -le 75
+then                   # YELLOW-ORANGE
+  echo "cpu:<fc=#ffdd00>" $cpu "</fc>% |"
+else                   # RED
+  echo "cpu:<fc=#ff0000>" $cpu "</fc>% |"
+fi

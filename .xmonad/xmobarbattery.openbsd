@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+from subprocess import check_output
+
+out = check_output(['apm'])
+out = str(out, encoding='utf8')
+out = out.split('\n')[0]
+out = out.split(' ')[3]
+out = out.split('%')[0]
+
+level = float(out)
+
+ICE       = "#e0ffff"
+GREEN     = "#00ff00"
+TURQUOISE = "#00ffff"
+YELLOW    = "#ffff00"
+ORANGE    = "#ff4400"
+RED       = "#ff0000"
+
+if level < 10:
+  print("Bat: <fc=",RED,">",level,"</fc>% |",sep='',end='')
+elif level < 20: 
+  print("Bat: <fc=",ORANGE,">",level,"</fc>% |",sep='',end='')
+elif level < 30: 
+  print("Bat: <fc=",YELLOW,">",level,"</fc>% |",sep='',end='')
+elif level < 70:
+  print("Bat: <fc=",TURQUOISE,">",level,"</fc>% |",sep='',end='')
+elif level > 98:
+  print("Bat: <fc=",ICE,">",level,"</fc>% |",sep='',end='')
+else:
+  print("Bat: <fc=",GREEN,">",level,"</fc>% |",sep='',end='')

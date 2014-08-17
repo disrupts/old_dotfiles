@@ -1,0 +1,14 @@
+templates:
+  transmission-gtk:
+    transmission: yes
+
+tasks:
+  shana:
+    rss: http://www.website.com/
+    accept_all: yes
+    template: transmission-gtk
+
+schedules:
+  - tasks: '*'
+    interval:
+      hours: 6

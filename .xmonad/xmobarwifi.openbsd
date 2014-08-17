@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+INTERFACE = 'run0'
+
+from subprocess import check_output
+
+COLOUR_IN  = "<fc=#00ffff>"
+COLOUR_OUT = "</fc>"
+
+out = check_output(['ifconfig'])
+out = str(out, encoding='utf8')
+
+if out.find(INTERFACE) == -1:
+    print(COLOUR_IN, 'DISC.', COLOUR_OUT, ' |', end='', sep='')
+    exit()
+
+out = check_output(['ifconfig', INTERFACE])
+out = str(out, encoding='utf8')
+lines = out.split('\n')
+
+
+if lines[5].split(' ') == ['\tstatus:', 'no', 'network']:
+    print(COLOUR_IN, 'OFFLINE', COLOUR_OUT, ' |', end='', sep='')
+    exit()
+
+essid = lines[6].split(' ')[2]
+strength = float(lines[6].split(' ')[7].split('dB')[0])
+
+bars = 3**(strength/30)
+
+if bars < 1.0:
+  bar_graph = '[' + COLOUR_IN + '/////' + COLOUR_OUT +     ']' 
+elif bars < 2.0:
+  bar_graph = '[' + COLOUR_IN + '/////' + COLOUR_OUT +     ']'
+elif bars < 3.0:
+  bar_graph = '[' + COLOUR_IN + '////'  + COLOUR_OUT +    '-]'
+elif bars < 4.0:
+  bar_graph = '[' + COLOUR_IN + '////'  + COLOUR_OUT +    '-]' 
+elif bars < 5.0:
+  bar_graph = '[' + COLOUR_IN + '///'   + COLOUR_OUT +   '--]'
+elif bars < 6.0:
+  bar_graph = '[' + COLOUR_IN + '///'   + COLOUR_OUT +   '--]'
+elif bars < 7.0:
+  bar_graph = '[' + COLOUR_IN + '//'    + COLOUR_OUT +  '---]'
+elif bars < 8.0:
+  bar_graph = '[' + COLOUR_IN + '//'    + COLOUR_OUT +  '---]'
+elif bars < 9.0:
+  bar_graph = '[' + COLOUR_IN + '/'     + COLOUR_OUT + '----]'
+elif bars < 10.0:
+  bar_graph = '[' + COLOUR_IN + '/'     + COLOUR_OUT + '----]'
+elif bars < 11.0:
+  bar_graph = '[-----]'
+else:
+  bar_graph = '[--' + COLOUR_IN + '!--]'
+
+print(essid," ",bar_graph," |",end='',sep='')

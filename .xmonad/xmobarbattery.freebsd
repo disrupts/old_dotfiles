@@ -1,0 +1,16 @@
+#!/bin/sh
+level=$(acpiconf -i0 | grep 'Remaining capacity' | cut -w -f3 | sed -r 's/([^0-9]*([0-9]*)){1}.*/\2/')
+#time=$(acpiconf -i0 | grep 'Remaining time' | cut -w -f3-4
+
+if test $level -le 10
+then                          # RED
+  echo -e 'Bat:<fc=#ff0000>' $level '</fc>% |'
+elif test $level -le 30
+then                          # YELLOW
+  echo -e 'Bat:<fc=#ffff00>' $level '</fc>% |'
+elif test $level -le 70
+then                          # NORMAL
+  echo -e 'Bat: ' $level '% |'
+else                          # GREEN
+  echo -e 'Bat:<fc=#00ff00>' $level '</fc>% |'
+fi

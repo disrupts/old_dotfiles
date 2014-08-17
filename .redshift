@@ -1,0 +1,16 @@
+[redshift]
+temp-day=6500k
+temp-night=2400
+
+; smooth transition
+transition=1
+
+location-provider=manual
+
+; 'randr' preferred method, 'vidmode' is an older API, 'redshift -m list' for all
+adjustment-method=randr
+
+; Configuration of location-provider
+[manual]
+lat=
+lon=

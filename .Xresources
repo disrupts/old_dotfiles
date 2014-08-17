@@ -1,0 +1,45 @@
+URxvt*.depth: 32
+!URxvt*.background: rgba:3333/bbbb/1111/bbbb good for when ill run a composite manager (xcompmgr, dcompmgr, compiz...)
+URxvt*.transparent: true
+URxvt*.shading: 30 
+
+URxvt*.scrollBar: false
+URxvt*.font: xft:Inconsolata:size=8:antialias=true
+
+!-*-{ Xft settings
+Xft*dpi:	96
+Xft*antialias:	True
+Xft*hinting:	Full
+!-*-}
+
+*foreground: #c8c8c8
+
+!black
+*color0:  #251f1f
+*color8:  #5e5e5e
+!red
+*color1:  #eb4509
+*color9:  #eb4509
+!green
+*color2:  #94e76b
+*color10: #95e76b
+!yellow
+*color3:  #ffac18
+*color11: #ffac18
+!blue
+*color4:  #46aede
+*color12: #46aede
+!magenta
+*color5:  #e32c57
+*color13: #e32c57
+!cyan
+*color6:  #d6dbac
+*color14: #d6dbac
+!white
+*color7:  #efefef
+*color15: #efefef
+
+!loading links in browser
+URxvt.perl-ext-common: 	default,matcher
+URxvt.url-launcher:	    /usr/local/bin/firefox
+URxvt.matcher.button:	1
