@@ -1,4 +1,5 @@
 " vim: nowrap fdm=marker
+set encoding=utf-8
 
 " Pathogen Stuff                                 {{{1
 call pathogen#infect()

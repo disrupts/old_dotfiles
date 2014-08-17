@@ -109,15 +109,20 @@ alias pip="pip3"
 # Sets correct path for brew-cask symlinks
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
+# Locale is not set in Mac OS X ### {{{1
+export LC_CTYPE=en_GB.UTF-8
+export LC_ALL=en_GB.UTF-8
+
 # Setting PATH #################### {{{1
 
 # Mac OS X PATH ################### {{{2
 # instructions http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/usr/texbin:~/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/X11/bin:$PATH"
-# ruby gems:   /usr/local/opt/ruby/bin
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/Users/xavier/pkg/bin:/Users/xavier/pkg/sbin:/usr/texbin:~/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/X11/bin:$PATH"
+# ruby gems with brew ruby:   /usr/local/opt/ruby/bin
 # LaTex stuff: /usr/texbin
 # brew:        /usr/local/bin /usr/local/sbin
 # X (Mac os x): /usr/X11/bin/
+# pkgsrc:     ~/pkg/bin ~/pkg/sbin
 
 # Brew autocompletion & RVM ?? #### {{{1
 fpath=($HOME/.zsh/func $fpath)
