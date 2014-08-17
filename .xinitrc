@@ -37,6 +37,9 @@ eval $(cat ~/.fehbg) &
 # need to specify config file for older versions
 redshift -c ~/.redshift &
 
+# start flexget
+#flexget daemon start -d
+
 # start trayer
 trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 6 --transparent true  --alpha 0  --tint 0x000000  --height 17 &
 
