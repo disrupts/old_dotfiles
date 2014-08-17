@@ -1,0 +1,61 @@
+# Alias ########################### {{{1
+
+# Basic ########################### {{{2
+# vim with CTRL-S for zsh
+#alias vim="stty stop '' -ixoff ; /Applications/MacVim.app/Contents/MacOS/Vim"
+#alias vim="/usr/local/Cellar/macvim/7.4-72/MacVim.app/Contents/MacOS/Vim" # with brew macvim, could do it better, installing also vim?
+
+# main general alias ############## {{{2
+alias top='htop'
+
+# Internet ######################## {{{2
+alias ip="curl ip.appspot.com"
+alias who="lsof -P -i -n"
+alias ping='ping -c 5'
+alias pingnodns='ping -c 5 8.8.8.8'
+alias pinggoo='ping -c 5 www.google.com'
+
+# Navigation ###################### {{{2
+alias ..="cd .."
+alias home="cd ~"
+
+# Packet & Source Management ###### {{{2
+
+# Mac OS X ######################## {{{3
+
+# Install and update [MacPorts] ### {{{4
+#alias update="sudo port -v selfupdate"
+#alias upgrade="sudo port -v upgrade outdated"
+#alias search="port -v search"
+#alias pinfo="port -v info"
+#alias get="sudo port -v install"
+#alias forget="sudo port -v uninstall --follow-dependencies"
+#alias plist="port -v installed"
+#alias pclean="sudo port clean --all installed"
+#alias prmold="sudo port -f uninstall inactive"
+
+# Install and update [Homebrew] ### {{{4
+alias update="brew update"
+alias upgrade="brew upgrade"
+alias search="brew search"
+alias binfo="brew info"
+alias get="brew install"
+alias forget="brew remove"
+alias blist="brew list"
+alias bclean="brew cleanup"
+
+# Multimedia ###################### {{{2
+alias play_dvd="mplayer -vo xv dvdnav://"
+alias play="mplayer"
+
+# dvtm changing meta key ########## {{{2
+alias dvtm="dvtm -m '^a'"
+
+# python3 is too dificult to type # {{{2
+alias python="python3"
+alias pip="pip3"
+
+# sudo configuration ############## {{{2
+# When using sudo, use alias expansion (otherwise sudo ignores your aliases)
+#alias sudo="sudo " #http://www.shellperson.net/using-sudo-with-an-alias/
+#alias sudo="sudo "
