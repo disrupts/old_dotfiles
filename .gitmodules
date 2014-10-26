@@ -40,3 +40,6 @@
 [submodule ".vim/bundle/jpythonfold"]
 	path = .vim/bundle/jpythonfold
 	url = https://github.com/vim-scripts/jpythonfold.vim
+[submodule ".vim/bundle/mipssyntax"]
+	path = .vim/bundle/mipssyntax
+	url = https://github.com/Harenome/vim-mipssyntax.git

@@ -159,6 +159,9 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 " C header files - instead of C++                {{{2
 autocmd BufNewFile,BufReadPost *.h set filetype=c
 
+" Assembly will be understood as MIPS            {{{2
+autocmd BufNewFile,BufReadPost *.asm set filetype=MIPS
+
 " Visuals                                        {{{1
 " Colourscheme                                   {{{2
 colorscheme molokai
