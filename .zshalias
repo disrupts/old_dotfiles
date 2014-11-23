@@ -1,61 +1,64 @@
-# Alias ########################### {{{1
+# zshalias at $HOME/.zshalias #######
+# vim: nowrap fdm=marker
 
-# Basic ########################### {{{2
+# Basic ########################### {{{1
 # vim with CTRL-S for zsh
 #alias vim="stty stop '' -ixoff ; /Applications/MacVim.app/Contents/MacOS/Vim"
 #alias vim="/usr/local/Cellar/macvim/7.4-72/MacVim.app/Contents/MacOS/Vim" # with brew macvim, could do it better, installing also vim?
 
-# main general alias ############## {{{2
+# main general alias ############## {{{1
 alias top='htop'
 
-# Internet ######################## {{{2
+# Internet ######################## {{{1
 alias ip="curl ip.appspot.com"
 alias who="lsof -P -i -n"
 alias ping='ping -c 5'
 alias pingnodns='ping -c 5 8.8.8.8'
 alias pinggoo='ping -c 5 www.google.com'
 
-# Navigation ###################### {{{2
-alias ..="cd .."
-alias home="cd ~"
+# Navigation ###################### {{{1
+alias ..="cd .."   # similar but different to 'back'
+alias home="cd ~"  # same as 'cd' with no arguments
 
-# Packet & Source Management ###### {{{2
+# Packet & Source Management ###### {{{1
 
-# Mac OS X ######################## {{{3
+if [[ $CURRENT_OS == 'MACOSX' ]]; then
+  # Mac OS X ######################## {{{2
 
-# Install and update [MacPorts] ### {{{4
-#alias update="sudo port -v selfupdate"
-#alias upgrade="sudo port -v upgrade outdated"
-#alias search="port -v search"
-#alias pinfo="port -v info"
-#alias get="sudo port -v install"
-#alias forget="sudo port -v uninstall --follow-dependencies"
-#alias plist="port -v installed"
-#alias pclean="sudo port clean --all installed"
-#alias prmold="sudo port -f uninstall inactive"
+  # Install and update [MacPorts] ### {{{3
+  #alias update="sudo port -v selfupdate"
+  #alias upgrade="sudo port -v upgrade outdated"
+  #alias search="port -v search"
+  #alias pinfo="port -v info"
+  #alias get="sudo port -v install"
+  #alias forget="sudo port -v uninstall --follow-dependencies"
+  #alias plist="port -v installed"
+  #alias pclean="sudo port clean --all installed"
+  #alias prmold="sudo port -f uninstall inactive"
 
-# Install and update [Homebrew] ### {{{4
-alias update="brew update"
-alias upgrade="brew upgrade"
-alias search="brew search"
-alias binfo="brew info"
-alias get="brew install"
-alias forget="brew remove"
-alias blist="brew list"
-alias bclean="brew cleanup"
+  # Install and update [Homebrew] ### {{{3
+  alias update="brew update"
+  alias upgrade="brew upgrade"
+  alias search="brew search"
+  alias binfo="brew info"
+  alias get="brew install"
+  alias forget="brew remove"
+  alias blist="brew list"
+  alias bclean="brew cleanup"
+fi
 
-# Multimedia ###################### {{{2
+# Multimedia ###################### {{{1
 alias play_dvd="mplayer -vo xv dvdnav://"
 alias play="mplayer"
 
-# dvtm changing meta key ########## {{{2
+# dvtm changing meta key ########## {{{1
 alias dvtm="dvtm -m '^a'"
 
-# python3 is too dificult to type # {{{2
+# python3 is too dificult to type # {{{1
 alias python="python3"
 alias pip="pip3"
 
-# sudo configuration ############## {{{2
+# sudo configuration ############## {{{1
 # When using sudo, use alias expansion (otherwise sudo ignores your aliases)
 #alias sudo="sudo " #http://www.shellperson.net/using-sudo-with-an-alias/
 #alias sudo="sudo "

@@ -1,11 +1,13 @@
+# zshfn at $HOME/.zshfn ##########
 # Functions from xfausto at github.com/xfausto/dotfiles
+# vim: nowrap fdm=marker
 
-# show 256 colours:
+# show 256 colours ################ {{{1
 function 256co() {
   perl -e 'foreach $i (0..255) {printf("\e[38;5;$i"."m%03d\e[0m ",$i); }'
 }
 
-# go up X amount of directories:
+# go up X amount of directories ### {{{1
 function up(){
   local arg=${1:-1};
   while [ $arg -gt 0 ]; do
@@ -14,12 +16,12 @@ function up(){
   done
 }
 
-# jump to previous directory:
+# jump to previous directory ###### {{{1
 function back() {
   pushd -q -$1
 }
 
-# (adopted) copy and follow file to new dir:
+# copy & follow file to new dir ### {{{1
 function cpf () {
 if [[ -d $*[-1] ]]; then
   cp $* && cd $*[-1]
@@ -28,7 +30,7 @@ elif [[ -d ${*[-1]%/*} ]]; then
 fi
 }
 
-# (adopted) move and follow file to new dir:
+# move & follow file to new dir ### {{{1
 function mvf () {
 if [[ -d $*[-1] ]]; then
   mv $* && cd $*[-1]
@@ -37,18 +39,18 @@ elif [[ -d ${*[-1]%/*} ]]; then
 fi
 }
 
-# make folder and chdir into it:
+# make folder and chdir into it ### {{{1
 function mkcd() {
   mkdir -p "$@"
   cd "$@"
 }
 
-# copy and backup
+# copy and backup ################# {{{1
 function cpb () {
   cp "$@"{,.back}
 }
 
-# extract archive with preferred options:
+# extract archive ################# {{{1
 function extr() {
   if [ -f $1 ] ; then
     case $1 in
@@ -72,8 +74,8 @@ function extr() {
 fi
 }
 
-# The following need updating to the current OS & init system
-# {start,stop,restart} daemon:
+# {start,stop,restart} daemon ##### {{{1
+# NEEDS UPDATING TO THE CURRENT OS & INIT SYSTEM
 function rcstart() {
   sudo /etc/rc.d/$1 start;
 }
@@ -84,15 +86,16 @@ function rcrestart() {
   sudo /etc/rc.d/$1 restart;
 }
 
-# Not very useful in OpenBSD
-# reload a linux module:
+# reload a linux module ########### {{{1
+# NOT VERY USEFUL IN OPENBSD
+# NEEDS UPDATING TO THE CURRENT OS & INIT SYSTEM
 function reprobe() {
   sudo modprobe -r $1
   sudo modprobe $1
 }
 
-# I should check how to use it, seems useful
-# un-smart function for his todo lists:
+# un-smart function for his todo lists {{{1
+# I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
 n() {
     local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
     ${EDITOR} "${files[@]}"
@@ -106,8 +109,8 @@ nls() {
         }'
 }
 
-# Linux ifconfig based, needs an OpenBSD twin
-#netinfo - shows network information for your system
+#netinfo - shows network information for your system {{{1
+# LINUX IFCONFIG BASED, NEEDS AN OPENBSD TWIN
 function netinfo ()
 {
 echo "--------------- Network Information ---------------"
@@ -120,7 +123,7 @@ echo "${myip}"
 echo "---------------------------------------------------"
 }
 
-# simple status info
+# simple status info ############## {{{1
 status() {
      print
      print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
@@ -132,7 +135,9 @@ status() {
      print
 }
 
-# Linux based, needs an OpenBSD twin
+# set of 10 channel EQ functions ## {{{1
+# LINUX BASED, NEEDS AN OPENBSD TWIN
+# EQ SETUPS NEED TO BE SET TO TASTE
 seteq(){
     amixer -D equal -q set '01. 31 Hz' $1
     amixer -D equal -q set '02. 63 Hz' $2
@@ -145,13 +150,12 @@ seteq(){
     amixer -D equal -q set '09. 8 kHz' $9
     amixer -D equal -q set '10. 16 kHz' ${10}
 }
-
 Speakers()    { seteq 80 70 65 60 60 60 60 80 80 80; }
 Notebook()     { seteq 00 75 75 70 50 50 60 70 85 85; }
 Disable()   { seteq 66 66 66 66 66 66 66 66 66 66; }
 rocks ()  { seteq 91 67 39 36 37 47 53 63 67 75: }
 
-# Any function (lists any running instance of a program)
+# Any function (lists any running instance of a program) {{{1
 any() {
     emulate -L zsh
     unsetopt KSH_ARRAYS
@@ -163,7 +167,7 @@ any() {
     fi
 }
 
-# reload zshrc
+# reload zshrc #################### {{{1
 function src()
 {
         autoload -U zrecompile
@@ -176,13 +180,13 @@ function src()
 
 }
 
-# find colored
+# find colored #################### {{{1
 f() {
         find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls --color=auto -1d
 }
 
-# Nice, I don't know what I'll use it for, but I like it
-# Scratch directory
+# Scratch directory ############### {{{1
+# NICE, I DON'T KNOW WHAT I'LL USE IT FOR, BUT I LIKE IT
 function new-scratch {
   cur_dir="$HOME/scratch"
   new_dir="$HOME/tmp/scratch-`date +'%s'`"
@@ -192,7 +196,7 @@ function new-scratch {
   echo "New scratch dir ready for grinding ;>"
 }
 
-# Look busy
+# Look busy ####################### {{{1
 random_hex() { for i in $(seq 1 2); do echo -n $(echo "obase=16; $(($RANDOM # % 16))" | bc | tr '[A-Z]' '[a-z]'); done; }
 look_busy() { clear; while true; do head -n 500 /dev/urandom | hexdump -C | grep --color=auto "`random_hex` `random_hex`"; done; }
 
