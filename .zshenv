@@ -1,11 +1,11 @@
 # zshenv at $HOME/.zshenv #########
 # vim: nowrap fdm=marker
 
-export CURRENT_OS='MACOSX'
-
 # Locale is not set in Mac OS X ### {{{1
 export LC_CTYPE=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
+#export LANG=en_GB.UTF-8
+#export LANGUAGE=eng_GB.UTF-8
 
 # Setting default apps ############ {{{1
 export EDITOR="vim"

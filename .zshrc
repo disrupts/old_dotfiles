@@ -1,52 +1,70 @@
 # zshrc at $HOME/.zshrc ###########
 # vim: nowrap fdm=marker
 
-# Oh-My-Zsh configs ############### {{{1
-
-# Path to oh-my-zsh configuration {{{2
-ZSH=$HOME/.oh-my-zsh
-
-# OH-MY-ZSH Themes ################ {{{2
-#default ZSH_THEME="robbyrussell"
-#ZSH_THEME="random"
-#ZSH_THEME="xiong-chiamiov-plus"
-#ZSH_THEME="gentoo"
-#ZSH_THEME="candy"
-ZSH_THEME="af-magic" # the one I like the most, broken on update
-#ZSH_THEME="bira"
-#ZSH_THEME="fino" # without rvm colours are off
-#ZSH_THEME="gnzh"
-
-# Oh-My-Zsh Commented Variables ### {{{2
-
-# Comment this out to disable bi-weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment to change how often before auto-updates occur? (in days)
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment following line if you want to disable marking untracked files under
-# VCS as dirty. This makes repository status check for large repositories much,
-# much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# OH-MY-ZSH Plugins ############### {{{2
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew brew-cask bundler cabal gem mercurial nyan pip python pyenv ruby zsh-syntax-highlighting lol) # colorize vi-mode)
-
-# Loading Oh-My-Zsh ############### {{{2
-source $ZSH/oh-my-zsh.sh
-
+# Auto-detect OS ################## {{{1
+UNAME = `uname`
+#CURRENT_OS='OpenBSD'
+if [[ $UNAME == 'Darwin' ]]; then
+  CURRENT_OS='MACOSX'
+fi
+export CURRENT_OS
 
 # Set variables, aliases & functs # {{{1
-source ~/.zshenv	  # sets CURRENT_OS
-source ~/.zshalias	  # needs CURRENT_OS
-source ~/.zshfn		  # needs CURRENT_OS
+source ~/.zshenv      # needs CURRENT_OS
+source ~/.zshalias    # needs CURRENT_OS
+source ~/.zshfn       # needs CURRENT_OS
+
+# Launch Antigen ################## {{{1
+source ~/.antigen/antigen.zsh
+
+# Load oh-my-zsh ################## {{{1
+antigen bundle robbyrussell/oh-my-zsh lib/
+
+# Themes ########################## {{{1
+antigen theme af-magic
+#antigen theme xiong-chiamiov-plus
+#antigen theme gentoo
+#antigen theme candy
+#antigen theme bira
+#antigen theme fino # colors off without rvm
+#antigen theme gnzh
+#antigen theme random
+
+# Plugins ######################### {{{1
+# Version Control Systems ######### {{{2
+antigen bundle git
+antigen bundle mercurial
+
+# Python ########################## {{{2
+antigen bundle python
+antigen bundle pip
+#antigen bundle pyenv
+#antigen bundle virtualenv
+
+# Haskell ######################### {{{2
+antigen bundle cabal
+
+# Ruby ############################ {{{2
+antigen bundle ruby
+antigen bundle gem
+antigen bundle bundler
+
+# Extras ########################## {{{2
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle rupa/z
+
+# Fun ############################# {{{2
+antigen bundle lol
+antigen bundle nyan
+
+# OS Specific ##################### {{{2
+if [[ $CURRENT_OS == 'MACOSX' ]]; then
+  antigen bundle brew
+  antigen bundle brew-cask
+fi
+
+# Apply Antigen ################### {{{1
+antigen apply
 
 # Zsh VI config ### ############### {{{1
 
@@ -69,9 +87,9 @@ source ~/.zshfn		  # needs CURRENT_OS
 #bindkey 'ñ'  vi-cmd-mode
 
 #function zle-line-init zle-keymap-select {
-	#VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-	#RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$(git_custom_status) $EPS1"
-	#zle reset-prompt
+  #VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+  #RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}$(git_custom_status) $EPS1"
+  #zle reset-prompt
 #}
 
 #zle -N zle-line-init
