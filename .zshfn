@@ -1,5 +1,6 @@
 # zshfn at $HOME/.zshfn ##########
 # Functions from xfausto at github.com/xfausto/dotfiles
+# Except japanese-daytimes which is inspired by https://github.com/klein2de/japanese-daytimes
 # vim: nowrap fdm=marker
 
 # show 256 colours ################ {{{1
@@ -200,3 +201,17 @@ function new-scratch {
 random_hex() { for i in $(seq 1 2); do echo -n $(echo "obase=16; $(($RANDOM # % 16))" | bc | tr '[A-Z]' '[a-z]'); done; }
 look_busy() { clear; while true; do head -n 500 /dev/urandom | hexdump -C | grep --color=auto "`random_hex` `random_hex`"; done; }
 
+# japanese-daytimes ############### {{{1
+function japanese-daytimes {
+  HOUR=`date +"%H"`
+  if [[ $HOUR == '22' || $HOUR == '23' || $HOUR == '0' || $HOUR == '1' || $HOUR == '2' || $HOUR == '3' ]]; then
+    JAPANESE_GREETING="おやすみなさい"
+  elif [[ $HOUR == '4' || $HOUR == '5' || $HOUR == '6' || $HOUR == '7' || $HOUR == '8' || $HOUR == '9' ]]; then
+    JAPANESE_GREETING="おはようございます"
+  elif [[ $HOUR == '10' || $HOUR == '11' || $HOUR == '12' || $HOUR == '13' || $HOUR == '14' || $HOUR == '15' || $HOUR == '16' ]]; then
+    JAPANESE_GREETING="こんにちわ"
+  elif [[ $HOUR == '17' || $HOUR == '18' || $HOUR == '19' || $HOUR == '20' || $HOUR == '21' ]]; then
+    JAPANESE_GREETING="こんばんは"
+  fi
+  echo $JAPANESE_GREETING
+}
