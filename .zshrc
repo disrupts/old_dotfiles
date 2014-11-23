@@ -48,12 +48,6 @@ source ~/.zshenv	  # sets CURRENT_OS
 source ~/.zshalias	  # needs CURRENT_OS
 source ~/.zshfn		  # needs CURRENT_OS
 
-# Brew autocompletion & RVM ?? #### {{{1
-# SHOULD BE DONE BY PLUGIN, & I DON'T USE RVM ANYMORE
-#fpath=($HOME/.zsh/func $fpath)
-#typeset -U fpath
-
-
 # Zsh VI config ### ############### {{{1
 
 # mode, e for emacs, v for vi, #### {{{2
