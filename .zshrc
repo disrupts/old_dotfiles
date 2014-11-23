@@ -2,7 +2,7 @@
 # vim: nowrap fdm=marker
 
 # Auto-detect OS ################## {{{1
-UNAME = `uname`
+UNAME=`uname`
 #CURRENT_OS='OpenBSD'
 if [[ $UNAME == 'Darwin' ]]; then
   CURRENT_OS='MACOSX'
