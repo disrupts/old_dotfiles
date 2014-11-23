@@ -43,3 +43,6 @@
 [submodule ".vim/bundle/mipssyntax"]
 	path = .vim/bundle/mipssyntax
 	url = https://github.com/Harenome/vim-mipssyntax.git
+[submodule ".antigen"]
+	path = .antigen
+	url = https://github.com/zsh-users/antigen.git
