@@ -55,4 +55,4 @@ fi
 # Sets correct path for brew-cask symlinks
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
   export HOMEBREW_CASK_OPTS="--appdir=/Applications"
-elif
+if
