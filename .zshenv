@@ -41,7 +41,16 @@ fi
 #                       ~/pkg/sbin
 
 
-# App specific configs ############ {{{1
+# Set Package Repo for OpenBSD #### {{{1
+if [[ $CURRENT_OS == 'OpenBSD' ]]; then
+  if [[ $OS_BRANCH == 'stable' ]]; then
+    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`
+  elif [[ $OS_BRANCH == 'current' ]]; then
+    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`arch -s`
+  fi
+fi
+
+# App specific configs ############ {{{1
 # GPodder folders ################# {{{2
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
   launchctl setenv GPODDER_HOME /Users/xavier/.gpodder
