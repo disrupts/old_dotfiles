@@ -1,14 +1,16 @@
 # kshrc at $HOME/.kshrc ###########
+# vim: nowrap fdm=marker
+
 # to execute at launch add . ~/.kshrc to .profile as such
 # > SHELL_NAME=`basename $SHELL`
 # > if [[ $SHELL_NAME == 'ksh' ]]; then
 # >   . ~/.kshrc
 # > fi
 
-# Set history file ############### {{1
+# Set history file ############### {{{1
 export HISTFILE=$HOME/.ksh_history
 
-# Set prompt (PS1) ############### {{1
+# Set prompt (PS1) ############### {{{1
 BLACK='\033[30m'
 RED='\033[31m'
 GREEN='\033[32m'
