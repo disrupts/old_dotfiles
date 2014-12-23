@@ -3,9 +3,10 @@
 
 # Auto-detect OS ################## {{{1
 UNAME=`uname`
-#CURRENT_OS='OpenBSD'
 if [[ $UNAME == 'Darwin' ]]; then
   CURRENT_OS='MACOSX'
+elif [[ $UNAME == 'OpenBSD' ]]; then
+  CURRENT_OS='OpenBSD'
 fi
 export CURRENT_OS
 
