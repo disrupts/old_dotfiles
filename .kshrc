@@ -2,9 +2,8 @@
 # vim: nowrap fdm=marker
 
 # to execute at launch add . ~/.kshrc to .profile as such
-# > SHELL_NAME=`basename $SHELL`
-# > if [[ $SHELL_NAME == 'ksh' ]]; then
-# >   . ~/.kshrc
+# > if [[ `basename $SHELL` == 'ksh' ]]; then
+# >   export ENV=$HOME/.kshrc
 # > fi
 
 # Set history file ############### {{{1
