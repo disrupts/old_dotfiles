@@ -19,8 +19,9 @@ BLUE='\033[34m'
 MAGENTA='\033[35m'
 CYAN='\033[36m'
 WHITE='\033[37m'
-USERSYMBOL=$(if [[ $USER == 'root' ]] then echo '#'; else echo '$'; fi)
-USERCOLOR=$(if [[ $USER == 'root' ]] then echo $RED; else echo $YELLOW; fi)
+REALUSER=`whoami`
+USERSYMBOL=$(if [[ $REALUSER == 'root' ]] then echo '#'; else echo '$'; fi)
+USERCOLOR=$(if [[ $REALUSER == 'root' ]] then echo $RED; else echo $YELLOW; fi)
 HOSTCOLOR=$YELLOW
 MAINCOLOR=$CYAN
-export PS1=$(print $USERCOLOR$USER$HOSTCOLOR"@"`hostname`$MAINCOLOR" "$USERSYMBOL" ")
+export PS1=$(print $USERCOLOR$REALUSER$HOSTCOLOR"@"`hostname`$MAINCOLOR" "$USERSYMBOL" ")
