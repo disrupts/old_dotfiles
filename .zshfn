@@ -1,119 +1,48 @@
 # zshfn at $HOME/.zshfn ##########
-# Functions from xfausto at github.com/xfausto/dotfiles
-# Except japanese-daytimes which is inspired by https://github.com/klein2de/japanese-daytimes
+# some functions from xfausto at github.com/xfausto/dotfiles
+# japanese-daytimes is inspired by https://github.com/klein2de/japanese-daytimes
 # vim: nowrap fdm=marker
 
-# show 256 colours ################ {{{1
-function 256co() {
-  perl -e 'foreach $i (0..255) {printf("\e[38;5;$i"."m%03d\e[0m ",$i); }'
+# grep & ls coloured ############ {{{1
+# makes the other function OS independent with colour enabled by default
+function grep_color() {
+  case $CURRENT_OS in
+    'OpenBSD')  grep;;
+    *)          grep --color=auto;;
+  esac
+}
+function ls_color() {
+  case $CURRENT_OS in
+    'OpenBSD')  ls;; # could use colorls -G
+    *)          ls --color=auto;;
+  esac
 }
 
-# go up X amount of directories ### {{{1
-function up(){
-  local arg=${1:-1};
-  while [ $arg -gt 0 ]; do
-    cd .. >&/dev/null;
-    arg=$(($arg - 1));
-  done
+# sleep & shutdown ############## {{{1
+# There is no function for Hibernation until I find a name for it
+# It would be better to change the others to and keep only oyasumi
+# Suspend now (sleep) ########### {{{2
+function oyasumi() {
+  case $CURRENT_OS in
+    'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
+    *)          sudo shutdown -s now ;;
+  esac
 }
 
-# jump to previous directory ###### {{{1
-function back() {
-  pushd -q -$1
+# shutdown now ################## {{{2
+function oyasuminasai() {
+  case $CURRENT_OS in
+    'OpenBSD')  sudo shutdown -hp now ;;
+    'FreeBSD')  sudo shutdown -p now  ;;
+    *)          sudo shutdown -h now  ;;
+  esac
 }
 
-# copy & follow file to new dir ### {{{1
-function cpf () {
-if [[ -d $*[-1] ]]; then
-  cp $* && cd $*[-1]
-elif [[ -d ${*[-1]%/*} ]]; then
-  cp $* && cd ${*[-1]%/*}
-fi
-}
 
-# move & follow file to new dir ### {{{1
-function mvf () {
-if [[ -d $*[-1] ]]; then
-  mv $* && cd $*[-1]
-elif [[ -d ${*[-1]%/*} ]]; then
-  mv $* && cd ${*[-1]%/*}
-fi
-}
-
-# make folder and chdir into it ### {{{1
-function mkcd() {
-  mkdir -p "$@"
-  cd "$@"
-}
-
-# copy and backup ################# {{{1
-function cpb () {
-  cp "$@"{,.back}
-}
-
-# extract archive ################# {{{1
-function extr() {
-  if [ -f $1 ] ; then
-    case $1 in
-      *.tar.bz2) tar xjf $1 ;;
-      *.tar.gz) tar xzf $1 ;;
-      *.bz2) bunzip2 $1 ;;
-      *.rar) unrar e $1 ;;
-      *.gz) gunzip $1 ;;
-      *.tar) tar xf $1 ;;
-      *.tbz2) tar xjf $1 ;;
-      *.tgz) tar xzf $1 ;;
-      *.zip) unzip $1 ;;
-      *.Z) uncompress $1 ;;
-      *.7z) 7z x $1 ;;
-      *.xz) unxz -vk $1 ;;
-      *.lzma) unlzma -vk $1 ;;
-      *) echo "'$1' cannot be extracted via extr()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-fi
-}
-
-# {start,stop,restart} daemon ##### {{{1
-# NEEDS UPDATING TO THE CURRENT OS & INIT SYSTEM
-function rcstart() {
-  sudo /etc/rc.d/$1 start;
-}
-function rcstop() {
-  sudo /etc/rc.d/$1 stop;
-}
-function rcrestart() {
-  sudo /etc/rc.d/$1 restart;
-}
-
-# reload a linux module ########### {{{1
-# NOT VERY USEFUL IN OPENBSD
-# NEEDS UPDATING TO THE CURRENT OS & INIT SYSTEM
-function reprobe() {
-  sudo modprobe -r $1
-  sudo modprobe $1
-}
-
-# un-smart function for his todo lists {{{1
-# I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
-n() {
-    local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
-    ${EDITOR} "${files[@]}"
-}
-
-nls() {
-    tree -CR --noreport $HOME/.notes | awk '{
-        if (NF==1) print $1;
-        else if (NF==2) print $2;
-        else if (NF==3) printf "  %s\n", $3
-        }'
-}
-
-#netinfo - shows network information for your system {{{1
-# LINUX IFCONFIG BASED, NEEDS AN OPENBSD TWIN
-function netinfo ()
-{
+# Status info (net & system) ###### {{{1
+# netinfo -  network information ## {{{2
+# LINUX ONLY
+function netinfo() {
 echo "--------------- Network Information ---------------"
 /sbin/ifconfig | awk /'inet addr/ {print $2}'
 /sbin/ifconfig | awk /'Bcast/ {print $3}'
@@ -124,8 +53,9 @@ echo "${myip}"
 echo "---------------------------------------------------"
 }
 
-# simple status info ############## {{{1
-status() {
+# simple status info ############## {{{2
+# LINUX ONLY; ISSUES WITH SYSTEM LINE, cat of /etc/ should be replaced with uname
+function status() {
      print
      print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
      print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
@@ -136,58 +66,191 @@ status() {
      print
 }
 
-# set of 10 channel EQ functions ## {{{1
-# LINUX BASED, NEEDS AN OPENBSD TWIN
-# EQ SETUPS NEED TO BE SET TO TASTE
-seteq(){
-    amixer -D equal -q set '01. 31 Hz' $1
-    amixer -D equal -q set '02. 63 Hz' $2
-    amixer -D equal -q set '03. 125 Hz' $3
-    amixer -D equal -q set '04. 250 Hz' $4
-    amixer -D equal -q set '05. 500 Hz' $5
-    amixer -D equal -q set '06. 1 kHz' $6
-    amixer -D equal -q set '07. 2 kHz' $7
-    amixer -D equal -q set '08. 4 kHz' $8
-    amixer -D equal -q set '09. 8 kHz' $9
-    amixer -D equal -q set '10. 16 kHz' ${10}
-}
-Speakers()    { seteq 80 70 65 60 60 60 60 80 80 80; }
-Notebook()     { seteq 00 75 75 70 50 50 60 70 85 85; }
-Disable()   { seteq 66 66 66 66 66 66 66 66 66 66; }
-rocks ()  { seteq 91 67 39 36 37 47 53 63 67 75: }
 
-# Any function (lists any running instance of a program) {{{1
-any() {
+# RC.D daemon functions ########### {{{1
+function rcstart() {
+  /etc/rc.d/$1 start;
+}
+function rcstop() {
+  /etc/rc.d/$1 stop;
+}
+function rcreload() {
+  /etc/rc.d/$1 reload;
+}
+function rcrestart() {
+  /etc/rc.d/$1 restart;
+}
+function rccheck() {
+  /etc/rc.d/$1 check;
+}
+
+
+# File & folder navigation ######## {{{1
+# go up X amount of directories ### {{{2
+function up() {
+  local arg=${1:-1};
+  while [ $arg -gt 0 ]; do
+    cd .. >&/dev/null;
+    arg=$(($arg - 1));
+  done
+}
+
+# jump to previous directory ###### {{{2
+function back() {
+  pushd -q -$1
+}
+
+# copy & follow file to new dir ### {{{2
+function cpf() {
+if [[ -d $*[-1] ]]; then
+  cp $* && cd $*[-1]
+elif [[ -d ${*[-1]%/*} ]]; then
+  cp $* && cd ${*[-1]%/*}
+fi
+}
+
+# move & follow file to new dir ### {{{2
+function mvf() {
+if [[ -d $*[-1] ]]; then
+  mv $* && cd $*[-1]
+elif [[ -d ${*[-1]%/*} ]]; then
+  mv $* && cd ${*[-1]%/*}
+fi
+}
+
+# make folder and chdir into it ### {{{2
+function mkcd() {
+  mkdir -p "$@"
+  cd "$@"
+}
+
+# make a backup copy ############## {{{2
+function cpb() {
+  cp "$@"{,.back}
+}
+
+
+# Other system utilities ########## {{{1
+# extract archive ################# {{{2
+# old name was extr
+function extract() {
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2) tar xjf    $1 ;;
+      *.tar.gz)  tar xzf    $1 ;;
+      *.bz2)     bunzip2    $1 ;;
+      *.rar)     unrar e    $1 ;;
+      *.gz)      gunzip     $1 ;;
+      *.tar)     tar xf     $1 ;;
+      *.tbz2)    tar xjf    $1 ;;
+      *.tgz)     tar xzf    $1 ;;
+      *.zip)     unzip      $1 ;;
+      *.Z)       uncompress $1 ;;
+      *.7z)      7z x       $1 ;;
+      *.xz)      unxz -vk   $1 ;;
+      *.lzma)    unlzma -vk $1 ;;
+      *) echo "'$1' cannot be extracted via extr()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+fi
+}
+
+# any instance of process ######### {{{2
+function any() {
     emulate -L zsh
     unsetopt KSH_ARRAYS
     if [[ -z "$1" ]] ; then
         echo "any - grep for process(es) by keyword" >&2
         echo "Usage: any " >&2 ; return 1
     else
-        ps xauwww | grep -i --color=auto "[${1[1]}]${1[2,-1]}"
+        ps xauwww | grep_color -i "[${1[1]}]${1[2,-1]}"
     fi
 }
 
-# reload zshrc #################### {{{1
-function src()
-{
-        autoload -U zrecompile
-                [ -f ~/.zshrc ] && zrecompile -p ~/.zshrc
-                [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
-                [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
-                [ -f ~/.zshrc.zwc.old ] && rm -f ~/.zshrc.zwc.old
-                [ -f ~/.zcompdump.zwc.old ] && rm -f ~/.zcompdump.zwc.old
-                source ~/.zshrc
-
+# find colored #################### {{{2
+# LINUX ONLY OPTION find -iregex (maybe on FreeBSD but not on openBSD)
+function f() {
+        find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_color -1d
 }
 
-# find colored #################### {{{1
-f() {
-        find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls --color=auto -1d
+# reload zshrc #################### {{{2
+# NEED TO CHECK WHAT THIS DOES, source .zshrc SHOULD BE ENOUGH?
+function src() {
+  autoload -U zrecompile
+    [ -f ~/.zshrc ] && zrecompile -p ~/.zshrc
+    [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
+    [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
+    [ -f ~/.zshrc.zwc.old ] && rm -f ~/.zshrc.zwc.old
+    [ -f ~/.zcompdump.zwc.old ] && rm -f ~/.zcompdump.zwc.old
+    source ~/.zshrc
 }
 
-# Scratch directory ############### {{{1
-# NICE, I DON'T KNOW WHAT I'LL USE IT FOR, BUT I LIKE IT
+# reload a linux kernel module #### {{{2
+# LINUX ONLY (no modules in OpenBSD, could add FreeBSD support)
+function reprobe() {
+  sudo modprobe -r $1
+  sudo modprobe $1
+}
+
+
+# Sound ########################### {{{1
+# mute everything ################# {{{2
+function mute() {
+  case $CURRENT_OS in
+    'OpenBSD') mixerctl outputs.master.mute=on ;;
+    'MACOSX') osascript -e "set Volume 0" ;;
+    *) echo "ERROR. mute NOT DEFINED FOR THIS OS."
+  esac
+}
+
+# toggle mute ##################### {{{2
+function mutet() {
+  case $CURRENT_OS in
+    'OpenBSD') mixerctl outputs.master.mute=toggle ;;
+    *) echo "ERROR. mutet NOT DEFINED FOR THIS OS."
+  esac
+}
+
+# set of 10 channel EQ functions ## {{{2
+# EQ SETUPS NEED TO BE SET TO TASTE
+function seteq() {
+  case $CURRENT_OS in
+    'OpenBSD')
+      ;;
+    'FreeBSD')
+      ;;
+    'MACOSX')
+      ;;
+    *)
+      amixer -D equal -q set '01. 31 Hz' $1
+      amixer -D equal -q set '02. 63 Hz' $2
+      amixer -D equal -q set '03. 125 Hz' $3
+      amixer -D equal -q set '04. 250 Hz' $4
+      amixer -D equal -q set '05. 500 Hz' $5
+      amixer -D equal -q set '06. 1 kHz' $6
+      amixer -D equal -q set '07. 2 kHz' $7
+      amixer -D equal -q set '08. 4 kHz' $8
+      amixer -D equal -q set '09. 8 kHz' $9
+      amixer -D equal -q set '10. 16 kHz' ${10}
+      ;;
+  esac
+}
+
+function Speakers()  { seteq 80 70 65 60 60 60 60 80 80 80; }
+function Notebook()  { seteq 00 75 75 70 50 50 60 70 85 85; }
+function Disable()   { seteq 66 66 66 66 66 66 66 66 66 66; }
+function rocks()     { seteq 91 67 39 36 37 47 53 63 67 75: }
+
+
+# Nyan ############################ {{{1
+# show 256 colours ################ {{{2
+# this one is useful to check terminal emulator compatibility
+function 256co() {
+  perl -e 'foreach $i (0..255) {printf("\e[38;5;$i"."m%03d\e[0m ",$i); }'
+}
+
+# Scratch directory ############### {{{2
 function new-scratch {
   cur_dir="$HOME/scratch"
   new_dir="$HOME/tmp/scratch-`date +'%s'`"
@@ -197,21 +260,39 @@ function new-scratch {
   echo "New scratch dir ready for grinding ;>"
 }
 
-# Look busy ####################### {{{1
-random_hex() { for i in $(seq 1 2); do echo -n $(echo "obase=16; $(($RANDOM # % 16))" | bc | tr '[A-Z]' '[a-z]'); done; }
-look_busy() { clear; while true; do head -n 500 /dev/urandom | hexdump -C | grep --color=auto "`random_hex` `random_hex`"; done; }
+# Look busy ####################### {{{2
+# LINUX ONLY COMMAND, seq not in OpenBSD
+function random_hex() { for i in $(seq 1 2); do echo -n $(echo "obase=16; $(($RANDOM # % 16))" | bc | tr '[A-Z]' '[a-z]'); done; }
+function look_busy() { clear; while true; do head -n 500 /dev/urandom | hexdump -C | grep_color "`random_hex` `random_hex`"; done; }
 
-# japanese-daytimes ############### {{{1
-function japanese-daytimes {
-  HOUR=`date +"%H"`
+# japanese-daytimes ############### {{{2
+function japanese-daytimes() {
+  local HOUR=`date +"%H"`
   if [[ $HOUR == '22' || $HOUR == '23' || $HOUR == '0' || $HOUR == '1' || $HOUR == '2' || $HOUR == '3' ]]; then
-    JAPANESE_GREETING="おやすみなさい"
+    local JAPANESE_GREETING="おやすみなさい"
   elif [[ $HOUR == '4' || $HOUR == '5' || $HOUR == '6' || $HOUR == '7' || $HOUR == '8' || $HOUR == '9' ]]; then
-    JAPANESE_GREETING="おはようございます"
+    local JAPANESE_GREETING="おはようございます"
   elif [[ $HOUR == '10' || $HOUR == '11' || $HOUR == '12' || $HOUR == '13' || $HOUR == '14' || $HOUR == '15' || $HOUR == '16' ]]; then
-    JAPANESE_GREETING="こんにちわ"
+    local JAPANESE_GREETING="こんにちわ"
   elif [[ $HOUR == '17' || $HOUR == '18' || $HOUR == '19' || $HOUR == '20' || $HOUR == '21' ]]; then
-    JAPANESE_GREETING="こんばんは"
+    local JAPANESE_GREETING="こんばんは"
+  else
+    local JAPANESE_GREETING="OUT OF BOUND HOUR REACHED."
   fi
   echo $JAPANESE_GREETING
+}
+
+# un-smart function for his todo lists {{{2
+# I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
+function n() {
+    local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
+    ${EDITOR} "${files[@]}"
+}
+
+function nls() {
+    tree -CR --noreport $HOME/.notes | awk '{
+        if (NF==1) print $1;
+        else if (NF==2) print $2;
+        else if (NF==3) printf "  %s\n", $3
+        }'
 }

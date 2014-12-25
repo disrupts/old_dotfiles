@@ -2,11 +2,11 @@
 # vim: nowrap fdm=marker
 
 # Auto-detect OS ################## {{{1
-UNAME=`uname`
+local UNAME=`uname`
 if [[ $UNAME == 'Darwin' ]]; then
   CURRENT_OS='MACOSX'
-elif [[ $UNAME == 'OpenBSD' ]]; then
-  CURRENT_OS='OpenBSD'
+else
+  CURRENT_OS=$UNAME
 fi
 export CURRENT_OS
 
@@ -20,6 +20,12 @@ source ~/.antigen/antigen.zsh
 
 # Load oh-my-zsh ################## {{{1
 antigen bundle robbyrussell/oh-my-zsh lib/
+#antigen use oh-my-zsh # DON'T KNOW IF THIS IS BETTER THAN PREVIOUS
+
+# solve grep color with BSD grep
+if [[ $CURRENT_OS == 'OpenBSD' ]]; then
+  alias grep="/usr/bin/grep"
+fi
 
 # Themes ########################## {{{1
 antigen theme af-magic
@@ -29,9 +35,18 @@ antigen theme af-magic
 #antigen theme bira
 #antigen theme fino # colors off without rvm
 #antigen theme gnzh
+#antigen theme funky
+#antigen theme caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 #antigen theme random
 
 # Plugins ######################### {{{1
+# Better zsh ###################### {{{2
+antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen bundle zsh-users/zsh-history-substring-search \
+#   && export ZSH_PLUGIN_HIST_SUBSTRING=1
+# antigen bundle tarruda/zsh-autosuggestions \
+#   && export ZSH_PLUGIN_AUTOSUGG=1
+
 # Version Control Systems ######### {{{2
 antigen bundle git
 antigen bundle mercurial
@@ -51,7 +66,6 @@ antigen bundle gem
 antigen bundle bundler
 
 # Extras ########################## {{{2
-antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle rupa/z
 
 # Fun ############################# {{{2
@@ -66,6 +80,11 @@ fi
 
 # Apply Antigen ################### {{{1
 antigen apply
+
+# Load bundle config ############# {{{1
+# no need if neither zsh-history-substring-search
+# nor zsh-autosuggestions are loaded
+# source ~/.zshbundleconf
 
 # Zsh VI config ### ############### {{{1
 

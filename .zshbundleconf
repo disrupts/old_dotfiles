@@ -1,0 +1,40 @@
+# zshbundleconf at $HOME/.zshbundleconf ######
+# vim: nowrap fdm=marker
+# This files contains bindings for functions defined in plugins
+
+# zsh-users/zsh-history-substring-search {{{1
+if [ -n "${ZSH_PLUGIN_HIST_SUBSTRING+1}" ]; then
+  # bind UP and DOWN arrow keys ##### {{{2
+  zmodload zsh/terminfo
+  bindkey "$terminfo[kcuu1]" history-substring-search-up
+  bindkey "$terminfo[kcud1]" history-substring-search-down
+  if [[ $CURRENT_OS == 'MACOSX' ]]; then
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+  fi
+
+  # bind P and N for EMACS mode ##### {{{2
+  bindkey -M emacs '^P' history-substring-search-up
+  bindkey -M emacs '^N' history-substring-search-down
+
+  # bind k and j for VI mode ######## {{{2
+  bindkey -M vicmd 'k' history-substring-search-up
+  bindkey -M vicmd 'j' history-substring-search-down
+fi
+
+
+# tarruda/zsh-autosuggestions ##### {{{1
+if [ -n "${ZSH_PLUGIN_AUTOSUGG+1}" ]; then
+  # Load suggestions ################ {{{2
+  zle-line-init() {
+      zle autosuggest-start
+  }
+  zle -N zle-line-init
+
+  # Accept suggestions without leaving insert mode {{{2
+  bindkey '^T' autosuggest-toggle
+  bindkey '^F' vi-forward-blank-word
+  bindkey '^f' vi-forward-word
+fi
+
+

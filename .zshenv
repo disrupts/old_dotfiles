@@ -7,6 +7,12 @@ export LC_ALL=en_GB.UTF-8
 #export LANG=en_GB.UTF-8
 #export LANGUAGE=eng_GB.UTF-8
 
+# ZSH configuration ############### {{{1
+# zsh history ##################### {{{2
+export HISTFILE=$HOME/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=10000
+
 # Setting default apps ############ {{{1
 export EDITOR="vim"
 export BROWSER="firefox"
@@ -43,11 +49,7 @@ fi
 
 # Set Package Repo for OpenBSD #### {{{1
 if [[ $CURRENT_OS == 'OpenBSD' ]]; then
-  if [[ $OS_BRANCH == 'stable' ]]; then
-    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`
-  elif [[ $OS_BRANCH == 'current' ]]; then
-    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`arch -s`
-  fi
+  export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`
 fi
 
 # App specific configs ############ {{{1
