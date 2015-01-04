@@ -81,7 +81,7 @@ fi
 # Apply Antigen ################### {{{1
 antigen apply
 
-# Load bundle config ############# {{{1
+# Load bundle config ############## {{{1
 # no need if neither zsh-history-substring-search
 # nor zsh-autosuggestions are loaded
 # source ~/.zshbundleconf
