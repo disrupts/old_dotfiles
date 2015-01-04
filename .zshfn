@@ -5,18 +5,16 @@
 
 # grep & ls coloured ############ {{{1
 # makes the other function OS independent with colour enabled by default
-function grep_color() {
-  case $CURRENT_OS in
-    'OpenBSD')  grep;;
-    *)          grep --color=auto;;
-  esac
-}
-function ls_color() {
-  case $CURRENT_OS in
-    'OpenBSD')  ls;; # could use colorls -G
-    *)          ls --color=auto;;
-  esac
-}
+case $CURRENT_OS in
+'OpenBSD')
+  alias grep_color="grep"
+  alias ls_color="ls" # could use colorls -G
+  ;;
+*)
+  alias grep_color="grep --color=auto"
+  alias ls_color="ls --color=auto"
+  ;;
+esac
 
 # sleep & shutdown ############## {{{1
 # There is no function for Hibernation until I find a name for it
@@ -24,65 +22,103 @@ function ls_color() {
 # Suspend now (sleep) ########### {{{2
 function oyasumi() {
   case $CURRENT_OS in
-    'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
-    *)          sudo shutdown -s now ;;
+  'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
+  *)          sudo shutdown -s now ;;
   esac
 }
 
 # shutdown now ################## {{{2
 function oyasuminasai() {
   case $CURRENT_OS in
-    'OpenBSD')  sudo shutdown -hp now ;;
-    'FreeBSD')  sudo shutdown -p now  ;;
-    *)          sudo shutdown -h now  ;;
+  'OpenBSD')  sudo shutdown -hp now ;;
+  'FreeBSD')  sudo shutdown -p now  ;;
+  *)          sudo shutdown -h now  ;;
   esac
 }
 
 
 # Status info (net & system) ###### {{{1
 # netinfo -  network information ## {{{2
-# LINUX ONLY
+# lists all interfaces and details information of active one
+# asumes there is only 1 active interface
+# NOT FINISHED, HORRIBLE WORK
 function netinfo() {
-echo "--------------- Network Information ---------------"
-/sbin/ifconfig | awk /'inet addr/ {print $2}'
-/sbin/ifconfig | awk /'Bcast/ {print $3}'
-/sbin/ifconfig | awk /'inet addr/ {print $4}'
-/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
-myip=`lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org:8245/ | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g' `
-echo "${myip}"
-echo "---------------------------------------------------"
+  # get list of interfaces
+  case $CURRENT_OS in
+  'MACOSX') NET_INTERFCS=`ifconfig | awk /'flags=/ {print $1}'`     ;;
+  *)        NET_INTERFCS=`ifconfig | awk /'Link encap/ {print $1}'` ;;
+  esac
+  # get all the other stuff (takes in bulk, doesn't check interfaces)
+  case $CURRENT_OS in
+  'MACOSX') NET_LOCALIPS=`ifconfig | awk /'inet / {print $2}'`
+            NET_BCASTIPS=`ifconfig | awk /'broadcast/ {print $6}'`
+            NET_NETMASKS=`ifconfig | awk /'netmask/ {print $4}'`
+            NET_MACADDRS=`ifconfig | awk /'ether/ {print $2}'`
+            ;;
+  *)        NET_LOCALIPS=`ifconfig | awk /'inet addr/ {print $2}' | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
+            NET_BCASTIPS=`ifconfig | awk /'Bcast/ {print $3}'     | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
+            NET_NETMASKS=`ifconfig | awk /'Mask/ {print $4}'      | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
+            NET_MACADDRS=`ifconfig | awk /'HWaddr/ {print $5}'`
+            ;;
+  esac
+  local NET_EXTRNIP=`curl --silent 'https://duckduckgo.com/?q=my+ip&ia=answer' | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
+  # print info
+  echo "--------------- Network Information ---------------"
+  echo "Available interfaces: $NET_INTERFCS"
+  echo "Details about $NET_INTERFCS"
+  echo "Ip Adress:\t$NET_LOCALIPS"
+  echo "Broadcast IP:\t$NET_BCASTIPS"
+  echo "Subnet Mask:\t$NET_NETMASKS"
+  echo "MAC Adress:\t$NET_MACADDRS"
+  echo "External IP:\t$NET_EXTRNIP"
+  echo "---------------------------------------------------"
+  # unset variables
+  unset NET_INTERFCS
+  unset NET_LOCALIPS
+  unset NET_BCASTIPS
+  unset NET_NETMASKS
+  unset NET_MACADDRS
+  unset NET_EXTRNIP
 }
 
 # simple status info ############## {{{2
-# LINUX ONLY; ISSUES WITH SYSTEM LINE, cat of /etc/ should be replaced with uname
 function status() {
-     print
-     print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
-     print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
-     print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
-     print "Login.: $LOGNAME (UID = $EUID) on $HOST"
-     print "System: $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)"
-     print "Uptime: $(uptime)"
-     print
+  case $CURRENT_OS in
+  'MACOSX')
+    print "Date..:  "$(date "+%Y-%m-%d %H:%M:%S")
+    print "Shell.:  Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
+    print "Term..:  $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
+    print "Login.:  $LOGNAME (UID = $EUID) on $HOST"
+    print "System:  $(uname -rs)"
+    print "Uptime: $(uptime)"
+    ;;
+  *)
+    print "Date..:  "$(date "+%Y-%m-%d %H:%M:%S")
+    print "Shell.:  Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
+    print "Term..:  $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
+    print "Login.:  $LOGNAME (UID = $EUID) on $HOST"
+    print "System:  $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)"
+    print "Uptime: $(uptime)"
+    ;;
+  esac
 }
 
 
 # RC.D daemon functions ########### {{{1
-function rcstart() {
-  /etc/rc.d/$1 start;
+# defines rc function to be OS-aware
+# and rcstart, rcstop, rcreload, rcrestart, rccheck that call the rc function
+function rc() {
+  case $CURRENT_OS in
+  #'Ubuntu') service $2 $1
+  'MACOSX') launchctl $1 $2;;
+  *)        /etc/rc.d/$2 $1;;
+  esac
 }
-function rcstop() {
-  /etc/rc.d/$1 stop;
-}
-function rcreload() {
-  /etc/rc.d/$1 reload;
-}
-function rcrestart() {
-  /etc/rc.d/$1 restart;
-}
-function rccheck() {
-  /etc/rc.d/$1 check;
-}
+function rcstart()   { rc start   $1; }
+function rcstop()    { rc stop    $1; }
+function rcreload()  { rc reload  $1; }
+function rcrestart() { rc restart $1; }
+function rccheck()   { rc check   $1; }
 
 
 # File & folder navigation ######## {{{1
@@ -102,19 +138,19 @@ function back() {
 
 # copy & follow file to new dir ### {{{2
 function cpf() {
-if [[ -d $*[-1] ]]; then
-  cp $* && cd $*[-1]
-elif [[ -d ${*[-1]%/*} ]]; then
-  cp $* && cd ${*[-1]%/*}
+  if [[ -d $*[-1] ]]; then
+    cp $* && cd $*[-1]
+  elif [[ -d ${*[-1]%/*} ]]; then
+    cp $* && cd ${*[-1]%/*}
 fi
 }
 
 # move & follow file to new dir ### {{{2
 function mvf() {
-if [[ -d $*[-1] ]]; then
-  mv $* && cd $*[-1]
-elif [[ -d ${*[-1]%/*} ]]; then
-  mv $* && cd ${*[-1]%/*}
+  if [[ -d $*[-1] ]]; then
+    mv $* && cd $*[-1]
+  elif [[ -d ${*[-1]%/*} ]]; then
+    mv $* && cd ${*[-1]%/*}
 fi
 }
 
@@ -136,20 +172,20 @@ function cpb() {
 function extract() {
   if [ -f $1 ] ; then
     case $1 in
-      *.tar.bz2) tar xjf    $1 ;;
-      *.tar.gz)  tar xzf    $1 ;;
-      *.bz2)     bunzip2    $1 ;;
-      *.rar)     unrar e    $1 ;;
-      *.gz)      gunzip     $1 ;;
-      *.tar)     tar xf     $1 ;;
-      *.tbz2)    tar xjf    $1 ;;
-      *.tgz)     tar xzf    $1 ;;
-      *.zip)     unzip      $1 ;;
-      *.Z)       uncompress $1 ;;
-      *.7z)      7z x       $1 ;;
-      *.xz)      unxz -vk   $1 ;;
-      *.lzma)    unlzma -vk $1 ;;
-      *) echo "'$1' cannot be extracted via extr()" ;;
+    *.tar.bz2) tar xjf    $1 ;;
+    *.tar.gz)  tar xzf    $1 ;;
+    *.bz2)     bunzip2    $1 ;;
+    *.rar)     unrar e    $1 ;;
+    *.gz)      gunzip     $1 ;;
+    *.tar)     tar xf     $1 ;;
+    *.tbz2)    tar xjf    $1 ;;
+    *.tgz)     tar xzf    $1 ;;
+    *.zip)     unzip      $1 ;;
+    *.Z)       uncompress $1 ;;
+    *.7z)      7z x       $1 ;;
+    *.xz)      unxz -vk   $1 ;;
+    *.lzma)    unlzma -vk $1 ;;
+    *) echo "'$1' cannot be extracted via extr()" ;;
     esac
   else
     echo "'$1' is not a valid file"
@@ -158,20 +194,22 @@ fi
 
 # any instance of process ######### {{{2
 function any() {
-    emulate -L zsh
-    unsetopt KSH_ARRAYS
-    if [[ -z "$1" ]] ; then
-        echo "any - grep for process(es) by keyword" >&2
-        echo "Usage: any " >&2 ; return 1
-    else
-        ps xauwww | grep_color -i "[${1[1]}]${1[2,-1]}"
-    fi
+  emulate -L zsh
+  unsetopt KSH_ARRAYS
+  if [[ -z "$1" ]] ; then
+    echo "any - grep for process(es) by keyword" >&2
+    echo "Usage: any " >&2 ; return 1
+  else
+    ps xauwww | grep_color -i "[${1[1]}]${1[2,-1]}"
+  fi
 }
 
 # find colored #################### {{{2
-# LINUX ONLY OPTION find -iregex (maybe on FreeBSD but not on openBSD)
+# LINUX ONLY OPTION
+# find -iregex not on openBSD (maybe FreeBSD)
+# xargs has no -r option in MACOSX
 function f() {
-        find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_color -1d
+  find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_color -1d
 }
 
 # reload zshrc #################### {{{2
@@ -198,17 +236,17 @@ function reprobe() {
 # mute everything ################# {{{2
 function mute() {
   case $CURRENT_OS in
-    'OpenBSD') mixerctl outputs.master.mute=on ;;
-    'MACOSX') osascript -e "set Volume 0" ;;
-    *) echo "ERROR. mute NOT DEFINED FOR THIS OS."
+  'OpenBSD')  mixerctl outputs.master.mute=on ;;
+  'MACOSX')   osascript -e "set Volume 0" ;;
+  *)          echo "ERROR. mute NOT DEFINED FOR THIS OS."
   esac
 }
 
 # toggle mute ##################### {{{2
 function mutet() {
   case $CURRENT_OS in
-    'OpenBSD') mixerctl outputs.master.mute=toggle ;;
-    *) echo "ERROR. mutet NOT DEFINED FOR THIS OS."
+  'OpenBSD')  mixerctl outputs.master.mute=toggle ;;
+  *)          echo "ERROR. mutet NOT DEFINED FOR THIS OS."
   esac
 }
 
@@ -216,24 +254,24 @@ function mutet() {
 # EQ SETUPS NEED TO BE SET TO TASTE
 function seteq() {
   case $CURRENT_OS in
-    'OpenBSD')
-      ;;
-    'FreeBSD')
-      ;;
-    'MACOSX')
-      ;;
-    *)
-      amixer -D equal -q set '01. 31 Hz' $1
-      amixer -D equal -q set '02. 63 Hz' $2
-      amixer -D equal -q set '03. 125 Hz' $3
-      amixer -D equal -q set '04. 250 Hz' $4
-      amixer -D equal -q set '05. 500 Hz' $5
-      amixer -D equal -q set '06. 1 kHz' $6
-      amixer -D equal -q set '07. 2 kHz' $7
-      amixer -D equal -q set '08. 4 kHz' $8
-      amixer -D equal -q set '09. 8 kHz' $9
-      amixer -D equal -q set '10. 16 kHz' ${10}
-      ;;
+  'OpenBSD')
+    ;;
+  'FreeBSD')
+    ;;
+  'MACOSX')
+    ;;
+  *)
+    amixer -D equal -q set '01. 31 Hz'  $1
+    amixer -D equal -q set '02. 63 Hz'  $2
+    amixer -D equal -q set '03. 125 Hz' $3
+    amixer -D equal -q set '04. 250 Hz' $4
+    amixer -D equal -q set '05. 500 Hz' $5
+    amixer -D equal -q set '06. 1 kHz'  $6
+    amixer -D equal -q set '07. 2 kHz'  $7
+    amixer -D equal -q set '08. 4 kHz'  $8
+    amixer -D equal -q set '09. 8 kHz'  $9
+    amixer -D equal -q set '10. 16 kHz' ${10}
+    ;;
   esac
 }
 
@@ -277,7 +315,7 @@ function japanese-daytimes() {
   elif [[ $HOUR == '17' || $HOUR == '18' || $HOUR == '19' || $HOUR == '20' || $HOUR == '21' ]]; then
     local JAPANESE_GREETING="こんばんは"
   else
-    local JAPANESE_GREETING="OUT OF BOUND HOUR REACHED."
+    local JAPANESE_GREETING="OUT-OF-BOUND HOUR REACHED."
   fi
   echo $JAPANESE_GREETING
 }
@@ -285,14 +323,14 @@ function japanese-daytimes() {
 # un-smart function for his todo lists {{{2
 # I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
 function n() {
-    local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
-    ${EDITOR} "${files[@]}"
+  local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
+  ${EDITOR} "${files[@]}"
 }
 
 function nls() {
-    tree -CR --noreport $HOME/.notes | awk '{
-        if (NF==1) print $1;
-        else if (NF==2) print $2;
-        else if (NF==3) printf "  %s\n", $3
-        }'
+  tree -CR --noreport $HOME/.notes | awk '{
+    if (NF==1) print $1;
+    else if (NF==2) print $2;
+    else if (NF==3) printf "  %s\n", $3
+    }'
 }

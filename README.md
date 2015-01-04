@@ -23,6 +23,7 @@ Todo
 ----
   * add mapping to .vimrc to make it toggle the 81st column marker too, when toggling list! (viewing tabs and returns - <leader>l)
   * update PATH in .zshenv to be system specific
+  * finish netinfo function in .zshfn
 
 [installrepo]: https://github.com/disrupts/installs
 [mathias]:     https://github.com/mathiasbynens/dotfiles
