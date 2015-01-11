@@ -18,33 +18,19 @@ export EDITOR="vim"
 export BROWSER="firefox"
 
 # Setting PATH #################### {{{1
-
-if [[ $CURRENT_OS == 'MACOSX' ]]; then
-  export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:/Users/xavier/pkg/bin:/Users/xavier/pkg/sbin:/usr/texbin:~/bin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/X11/bin:$PATH"
-fi
-
 # PATH Elements
-# =============
-#
-# ruby gems
-# ---------
-# Mac os x brew ruby:   /usr/local/opt/ruby/bin
-# OpenBSD ruby gems:
-#
-# LaTex stuff
-# -----------
-# Mac os x:             /usr/texbin
-# OpenBSD:
-#
-# Mac Specific
-# ------------
-# brew:        /usr/local/bin /usr/local/sbin
-# X (Mac os x): /usr/X11/bin/
-#
-# Not currently included
-# ----------------------
-# pkgsrc:               ~/pkg/bin
-#                       ~/pkg/sbin
+local MAC_HOMESCRIPTS="/Users/$USER/.bin_scripts"
+local MAC_BASIC="/usr/bin:/usr/sbin:/bin:/sbin"
+local MAC_RUBIES="/usr/local/opt/ruby/bin"          # brew ruby gems
+local MAC_LATEX="/usr/texbin"                       # brew latex
+local MAC_BREW="/usr/local/bin:/usr/local/sbin"     # Main brew location
+local MAC_XORG="usr/X11/bin/"                       # Xquartz & brew Xorg apps
+local MAC_PKGSRC="/Users/$USER/pkg/bin:/Users/$USER/pkg/sbin"
+
+# PATH export
+if [[ $CURRENT_OS == 'MACOSX' ]]; then
+  export PATH="$MAC_RUBIES:$MAC_BREW:$MAC_PKGSRC:$MAC_LATEX:$MAC_BASIC:$MAC_XORG:$MAC_HOMESCRIPTS:$PATH"
+fi
 
 
 # Set Package Repo for OpenBSD #### {{{1

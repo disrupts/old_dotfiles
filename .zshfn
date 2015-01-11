@@ -3,7 +3,7 @@
 # japanese-daytimes is inspired by https://github.com/klein2de/japanese-daytimes
 # vim: nowrap fdm=marker
 
-# grep & ls coloured ############ {{{1
+# grep & ls coloured ############## {{{1
 # makes the other function OS independent with colour enabled by default
 case $CURRENT_OS in
 'OpenBSD')
@@ -16,10 +16,10 @@ case $CURRENT_OS in
   ;;
 esac
 
-# sleep & shutdown ############## {{{1
+# sleep & shutdown ################ {{{1
 # There is no function for Hibernation until I find a name for it
 # It would be better to change the others to and keep only oyasumi
-# Suspend now (sleep) ########### {{{2
+# Suspend now (sleep) ############# {{{2
 function oyasumi() {
   case $CURRENT_OS in
   'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
@@ -27,7 +27,7 @@ function oyasumi() {
   esac
 }
 
-# shutdown now ################## {{{2
+# shutdown now #################### {{{2
 function oyasuminasai() {
   case $CURRENT_OS in
   'OpenBSD')  sudo shutdown -hp now ;;
@@ -38,49 +38,7 @@ function oyasuminasai() {
 
 
 # Status info (net & system) ###### {{{1
-# netinfo -  network information ## {{{2
-# lists all interfaces and details information of active one
-# asumes there is only 1 active interface
-# NOT FINISHED, HORRIBLE WORK
-function netinfo() {
-  # get list of interfaces
-  case $CURRENT_OS in
-  'MACOSX') NET_INTERFCS=`ifconfig | awk /'flags=/ {print $1}'`     ;;
-  *)        NET_INTERFCS=`ifconfig | awk /'Link encap/ {print $1}'` ;;
-  esac
-  # get all the other stuff (takes in bulk, doesn't check interfaces)
-  case $CURRENT_OS in
-  'MACOSX') NET_LOCALIPS=`ifconfig | awk /'inet / {print $2}'`
-            NET_BCASTIPS=`ifconfig | awk /'broadcast/ {print $6}'`
-            NET_NETMASKS=`ifconfig | awk /'netmask/ {print $4}'`
-            NET_MACADDRS=`ifconfig | awk /'ether/ {print $2}'`
-            ;;
-  *)        NET_LOCALIPS=`ifconfig | awk /'inet addr/ {print $2}' | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
-            NET_BCASTIPS=`ifconfig | awk /'Bcast/ {print $3}'     | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
-            NET_NETMASKS=`ifconfig | awk /'Mask/ {print $4}'      | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
-            NET_MACADDRS=`ifconfig | awk /'HWaddr/ {print $5}'`
-            ;;
-  esac
-  local NET_EXTRNIP=`curl --silent 'https://duckduckgo.com/?q=my+ip&ia=answer' | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])'`
-  # print info
-  echo "--------------- Network Information ---------------"
-  echo "Available interfaces: $NET_INTERFCS"
-  echo "Details about $NET_INTERFCS"
-  echo "Ip Adress:\t$NET_LOCALIPS"
-  echo "Broadcast IP:\t$NET_BCASTIPS"
-  echo "Subnet Mask:\t$NET_NETMASKS"
-  echo "MAC Adress:\t$NET_MACADDRS"
-  echo "External IP:\t$NET_EXTRNIP"
-  echo "---------------------------------------------------"
-  # unset variables
-  unset NET_INTERFCS
-  unset NET_LOCALIPS
-  unset NET_BCASTIPS
-  unset NET_NETMASKS
-  unset NET_MACADDRS
-  unset NET_EXTRNIP
-}
-
+# net has been moved to .bin_scripts
 # simple status info ############## {{{2
 function status() {
   case $CURRENT_OS in
@@ -110,6 +68,7 @@ function status() {
 function rc() {
   case $CURRENT_OS in
   #'Ubuntu') service $2 $1
+  #'Systemd') systemctl $1 $2
   'MACOSX') launchctl $1 $2;;
   *)        /etc/rc.d/$2 $1;;
   esac
@@ -229,6 +188,22 @@ function src() {
 function reprobe() {
   sudo modprobe -r $1
   sudo modprobe $1
+}
+
+# Wifi Stuf ###################### {{{2
+function list_wireless_interfaces() {
+  case $CURRENT_OS in
+  'MACOSX') echo 'en1' ;;
+  *)        iwconfig -a | grep -oE (([a-z]+[0-9]+\\t) ;;
+  esac
+}
+function wifi_off() {
+  # get wireless interface list
+  local interface_list=`list_wireless_interfaces`
+  # pull them all down
+  for interface in $interface_list; do
+    sudo ifconfig $interface down
+  done
 }
 
 

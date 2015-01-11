@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+
+from os import environ
+from subprocess import check_output
+from subprocess import Popen
+from subprocess import PIPE
+from re import compile
+from re import finditer
+from re import escape
+
+# Funcions for later
+def str_ip_to_int(string):
+    indexes = [match.start() for match in finditer(escape('.'), string)]
+    a = int(string[0:(indexes[0])])
+    b = int(string[(indexes[0]+1):(indexes[1])])
+    c = int(string[(indexes[1]+1):(indexes[2])])
+    d = int(string[(indexes[2]+1):])
+    return (a << 24) + (b << 16) + (c << 8) + d
+
+# netmask in str-hex format
+def net_ip_from_netmask(ip, netmask_str_hex):
+    bin_ip = 0xFFFFFFFF & str_ip_to_int(ip) & int(netmask_str_hex,16)
+    l = [(bin_ip & (0xFF << (8*n))) >> 8*n for n in (3, 2, 1, 0)]
+    return str(l[0]) + '.' + str(l[1]) + '.' + str(l[2]) + '.' + str(l[3])
+
+def route_ip_from_netmask(ip, netmask_str_hex):
+    bin_ip = 0xFFFFFFFF & str_ip_to_int(ip) & int(netmask_str_hex,16)
+    bin_ip = bin_ip + 1
+    l = [(bin_ip & (0xFF << (8*n))) >> 8*n for n in (3, 2, 1, 0)]
+    return str(l[0]) + '.' + str(l[1]) + '.' + str(l[2]) + '.' + str(l[3])
+
+
+def append_space(string):
+    return string + ' '
+
+# Gets $CURRENT_OS environment variable
+CURRENT_OS = environ["CURRENT_OS"]
+
+
+# Calls ifconfig
+output_ifconfig = check_output(['ifconfig'])
+output_ifconfig = str(output_ifconfig, encoding='utf8')
+
+
+# Separates output into list of interface paragraphs
+# where each paragraph is cut into a list of words within a list of lines
+
+if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
+    lines = output_ifconfig.split('\n')
+
+    words_in_lines = []
+    for line in lines:
+        words_in_lines.append(line.split(' '))
+
+    NUMBER_OF_LINES = len(lines)
+
+    positions  = []
+    interfaces = []
+    temp_list  = []
+
+    for num in range(NUMBER_OF_LINES):
+        word = words_in_lines[num][0]
+        if word != '':
+            if word[0] != '\t':
+                positions.append(num)
+
+    for num in range(NUMBER_OF_LINES):
+        if num in positions:
+            interfaces.append(temp_list)
+            temp_list = []
+            temp_list.append(words_in_lines[num])
+        else:
+            temp_list.append(words_in_lines[num])
+
+    interfaces.append(temp_list)
+    interfaces.pop(0)
+
+else: # LINUX asumed
+    paragraphs = output_ifconfig.split('\n\n')
+    lines = []
+    for paragraph in paragraphs:
+        lines = pargraph.split('\n')
+    interfaces = []
+    for line in lines:
+        print('PARSING NOT IMPLEMENTED.')
+
+
+# Gets list of interfaces and active interfaces
+list_of_interfaces          = []
+list_of_active_interfaces   = []
+list_of_inactive_interfaces = []
+
+joined_all_interfaces      = []
+joined_active_interfaces   = []
+joined_inactive_interfaces = []
+
+for interface in interfaces:
+    list_of_interfaces.append(interface[0][0][:-1])
+    text = ''.join(map(''.join, interface))
+    joined_all_interfaces.append(text)
+    if 'active' in text and 'inactive' not in text:
+        list_of_active_interfaces.append(list_of_interfaces[-1])
+        joined_active_interfaces.append(text)
+    else:
+        list_of_inactive_interfaces.append(list_of_interfaces[-1])
+        joined_inactive_interfaces.append(text)
+
+
+
+# Get info for active interfaces
+ip_regex = compile('[0-9]+.[0-9]+.[0-9]+.[0-9]+')
+info_interfaces = []
+
+if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
+    for num in range(len(list_of_active_interfaces)):
+        text = joined_active_interfaces[num]
+
+        index = text.index('inet')
+        ip    = ip_regex.match(text[(index+4):(index+4+13)]).group()
+
+        index   = text.index('netmask')
+        netmask = text[(index+7):(index+7+10)]
+
+        index     = text.index('broadcast')
+        broadcast = ip_regex.match(text[(index+9):(index+9+13)]).group()
+
+        index = text.index('ether')
+        mac   = text[(index+5):(index+5+14)]
+
+        output_route = check_output(['route','get', 'duckduckgo.com'])
+        output_route = str(output_route, encoding='utf8')
+        index        = output_route.index('gateway:')
+        gateway      = ip_regex.match(output_route[(index+9):(index+9+13)]).group()
+
+        net_ip = net_ip_from_netmask(ip, netmask)
+
+        info_dict              = {}
+        info_dict['interface'] = list_of_active_interfaces[num]
+        info_dict['ip']        = ip
+        info_dict['netmask']   = netmask
+        info_dict['broadcast'] = broadcast
+        info_dict['mac']       = mac
+        info_dict['gateway']   = gateway
+        info_dict['net_ip']    = net_ip
+
+        info_interfaces.append(info_dict)
+
+else: # Linux asumed
+    print('PARSING NOT IMPLEMENTED.')
+
+
+# Get external ip
+output_curl, status = Popen(['curl', '--silent', 'https://duckduckgo.com/?q=my+ip&ia=answer'], stdout=PIPE).communicate()
+output_curl = str(output_curl, encoding='utf8')
+
+index = output_curl.index('Your IP address is ')
+external_ip = ip_regex.match(output_curl[(index+19):(index+18+16)]).group()
+
+
+# Print all info
+printable_list_of_interfaces = ''.join(map(append_space,list_of_interfaces))[:-1]
+printable_list_of_inactive   = ''.join(map(append_space,list_of_inactive_interfaces))[:-1]
+
+total_length_available  = 0
+total_length_available += len('Availabale interfaces: ')
+total_length_available += len(printable_list_of_interfaces)
+
+total_length_fromwhich  = 0
+total_length_fromwhich += len('From which: ')
+total_length_fromwhich += len(printable_list_of_inactive)
+total_length_fromwhich += len(' are down.')
+
+min_length   = 29 # from Broadcast IP line
+total_length = max(total_length_available, total_length_fromwhich, min_length)
+chunk_length = len(" Network Information ")
+rest_length  = total_length - chunk_length
+half_length  = rest_length // 2
+
+before_string = ''.join(['-' for i in range(half_length)])
+after_string  = ''.join(['-' for i in range(half_length)])
+full_string   = ''.join(['-' for i in range(total_length)])
+
+if (half_length != rest_length / 2):
+    after_string += '-'
+
+print(before_string, ' Network Information ', after_string, sep='')
+
+filler_avail = ''.join([' 'for i in range(total_length - total_length_available )])
+filler_from  = ''.join([' 'for i in range(total_length - total_length_fromwhich )])
+print('Availabale interfaces: ', filler_avail, printable_list_of_interfaces,              sep='')
+print('From which: ',            filler_from,  printable_list_of_inactive,  ' are down.', sep='')
+
+print(full_string)
+
+for info in info_interfaces:
+    filler = {}
+    filler['interface'] = ''.join([' ' for i in range(total_length - len(info['interface']) - len('Details about: '))])
+    filler['ip']        = ''.join([' ' for i in range(total_length - len(info['ip'])        - len('Ip Adress: ')    )])
+    filler['gateway']   = ''.join([' ' for i in range(total_length - len(info['gateway'])   - len('Gateway: ')      )])
+    filler['broadcast'] = ''.join([' ' for i in range(total_length - len(info['broadcast']) - len('Broadcast IP: ') )])
+    filler['net_ip']    = ''.join([' ' for i in range(total_length - len(info['net_ip'])    - len('Network IP: ')   )])
+    filler['netmask']   = ''.join([' ' for i in range(total_length - len(info['netmask'])   - len('Subnet Mask: ')  )])
+    filler['mac']       = ''.join([' ' for i in range(total_length - len(info['mac'])       - len('MAC Adress: ')   )])
+
+    print('Details about: ', filler['interface'],  info['interface'], sep='')
+    print('Ip Adress: ',     filler['ip'],         info['ip'],        sep='')
+    print('Gateway: ',       filler['gateway'],    info['gateway'],   sep='')
+    print('Broadcast IP: ',  filler['broadcast'],  info['broadcast'], sep='')
+    print('Network IP: ',    filler['net_ip'],     info['net_ip'],    sep='')
+    print('Subnet Mask: ',   filler['netmask'],    info['netmask'],   sep='')
+    print('MAC Adress: ',    filler['mac'],        info['mac'],       sep='')
+
+    print(full_string)
+
+filler = ''.join([' ' for i in range(total_length - len(external_ip) - len('External IP: '))])
+print('External IP: ', filler, external_ip, sep='')
+
+print(full_string)
