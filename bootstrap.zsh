@@ -6,10 +6,8 @@
 cd "${0:A:h}"
 
 # Set some functions ############## {{{1
-function update_repo() {
-  git pull origin master
-  git submodule foreach git pull origin master
-}
+function update_repo() { git pull origin master }
+function update_submodules() { git submodule foreach git pull origin master }
 function reload_zsh() {
   source ~/.zshrc
   # src function is only avaible after sourcing .zshrc (.zshfn)
@@ -20,8 +18,11 @@ function sync_dotfiles() {
         --exclude "README.md"  -av --no-perms . ~
 }
 function print_help() {
-  echo "usage: bootstrap [--force][-f] [--update][-u] [--help][-h]"
-  echo "  Options 'force' and 'update' are compatible."
+  echo "usage: bootstrap [--force][-f] [--help][-h]"
+  echo "                 [--update-repo][-u] [--update-submodules][-s] [--update-all][-U]"
+  echo "  Options '--update-all' is equivalent to '--update-repo --update-submodules'."
+  echo "  Options '--force' is compatible with updates."
+  echo "  Joined arguments (eg: "-Uf") may be used."
 }
 function unset_functions() {
   unset ans
@@ -36,17 +37,43 @@ function unset_functions() {
 # Main stuff ###################### {{{1
 
 local FLAG_FORCE=0
-local FLAG_UPDATE=0
+local FLAG_UPDATE_REPO=0
+local FLAG_UPDATE_MODULES=0
 local FLAG_HELP=0
 
 for flag in $argv; do
   case $flag in
-  "--force" | "-f") FLAG_FORCE=1  ;;
-  "--help"  | "-h") FLAG_HELP=1   ;;
-  "--update"| "-u") FLAG_UPDATE=1 ;;
-  *) ;;
+  # checks for separate arguments
+  "--force"             | "-f") FLAG_FORCE=1                              ;;
+  "--help"              | "-h") FLAG_HELP=1                               ;;
+  "--update-submodules" | "-s") FLAG_UPDATE_MODULES=1                     ;;
+  "--update-repo"       | "-u") FLAG_UPDATE_REPO=1                        ;;
+  "--update-all"        | "-U") FLAG_UPDATE_MODULES=1; FLAG_UPDATE_REPO=1 ;;
+  # checks for combined arguments
+  "-us" | "-su" | "-usU" | "-uUs" | "-suU" | "-sUu" | "-Usu" | "-Uus")
+    FLAG_UPDATE_MODULES=1
+    FLAG_UPDATE_REPO=1
+    ;;
+  "-fU" | "-Uf" | "-fus" | "-fsu" | "-usf" | "-ufs" | "-sfu" | "-suf")
+    FLAG_UPDATE_REPO=1
+    FLAG_UPDATE_MODULES=1
+    FLAG_FORCE=1
+    ;;
+  "-sf" | "-fs")
+    FLAG_UPDATE_MODULES=1
+    FLAG_FORCE=1
+    ;;
+  "-fu" | "uf")
+    FLAG_UPDATE_REPO=1
+    FLAG_FORCE=1
+    ;;
   esac
 done
+# if no flag is set and $1 != "" then wrong argument written
+if [[ $argct>0 && $FLAG_FORCE=0 && $FLAG_UPDATE_REPO=0 && $FLAG_UPDATE_MODULES=0 ]]; then
+  echo "\$1:$1"
+  FLAG_HELP=1
+fi
 
 if [[ $FLAG_HELP = 1 ]]; then
   print_help
@@ -54,9 +81,13 @@ if [[ $FLAG_HELP = 1 ]]; then
   exit 0
 fi
 
-if [[ $FLAG_UPDATE = 1 ]]; then
+if [[ $FLAG_UPDATE_REPO = 1 ]]; then
   echo "Updating dotfiles..."
   update_repo
+fi
+if [[ $FLAG_UPDATE_MODULES = 1 ]]; then
+  echo "Updating git submodules..."
+  update_submodules
 fi
 
 if [[ $FLAG_FORCE = 1 ]]; then
