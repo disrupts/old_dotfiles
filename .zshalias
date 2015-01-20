@@ -22,8 +22,8 @@ alias home="cd ~"  # same as 'cd' with no arguments
 
 # Packet & Source Management ###### {{{1
 
+# Mac OS X ######################## {{{2
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
-  # Mac OS X ######################## {{{2
 
   # Install and update [MacPorts] ### {{{3
   #alias update="sudo port -v selfupdate"
@@ -45,6 +45,10 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
   alias forget="brew remove"
   alias blist="brew list"
   alias bclean="brew cleanup"
+
+# OpenBSD ######################### {{{2
+elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
+  alias pkg_search="curl $PKG_PATH\index.txt | grep_color"
 fi
 
 # Multimedia ###################### {{{1
