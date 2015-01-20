@@ -46,3 +46,6 @@
 [submodule ".antigen"]
 	path = .antigen
 	url = https://github.com/zsh-users/antigen.git
+[submodule ".vim/bundle/SmartColumnColor"]
+	path = .vim/bundle/SmartColumnColor
+	url = https://github.com/vim-scripts/SmartColumnColor.git

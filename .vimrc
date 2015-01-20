@@ -18,7 +18,7 @@ filetype plugin indent on
 " Preferences                                    {{{1
 " Esc key and Leader                             {{{2
 map! ñ <Esc>
-let mapleader=","           " changed from 'ç'
+let mapleader="-"           " changed from ',' and earlier 'ç'
 
 " Preferences not set by sensible.vim            {{{2
 set hidden                  " allow hidden buffers
@@ -47,22 +47,22 @@ set omnifunc=syntaxcomplete#Complete
 
 " Mappings                                       {{{1
 " disable arrow keys in insert mode              {{{2
-inoremap <up> 		<nop>
-inoremap <down>		<nop>
-inoremap <left>		<nop>
-inoremap <right>	<nop>
+inoremap <up>       <nop>
+inoremap <down>     <nop>
+inoremap <left>     <nop>
+inoremap <right>    <nop>
 
 " disable arrow keys in normal mode              {{{2
-nnoremap <up>		<nop>
-nnoremap <down>		<nop>
-nnoremap <left>		<nop>
-nnoremap <right>	<nop>
+nnoremap <up>       <nop>
+nnoremap <down>     <nop>
+nnoremap <left>     <nop>
+nnoremap <right>    <nop>
 
 " disable arrow keys in visual mode              {{{2
-vnoremap <up>		<nop>
-vnoremap <down>		<nop>
-vnoremap <left>		<nop>
-vnoremap <right>	<nop>
+vnoremap <up>       <nop>
+vnoremap <down>     <nop>
+vnoremap <left>     <nop>
+vnoremap <right>    <nop>
 
 " un-highlight with Delete key - already ctrl-l {{{2
 nmap <silent> <BS> :nohlsearch<CR>
@@ -78,7 +78,22 @@ vnoremap    v   <C-V>
 vnoremap <C-V>     v
 
 " Shortcut to rapidly toggle `set list`          {{{2
-nnoremap <leader>l :set list!<CR>
+" nnoremap <leader>l :set list! list?<CR>
+nnoremap <leader>l :call <SID>Better_list_with_marker_and_hardwrap()<CR>
+let b:disable_SmartColumnColors = 1
+function <SID>Better_list_with_marker_and_hardwrap()
+  if (&list == 0)
+    set list
+    set textwidth=0
+    set formatoptions-=ta
+    echom "auto-hardwrapping deactivated; list & column marker enabled"
+  else
+    set nolist
+    set textwidth=79
+    set formatoptions+=ta
+    echom "list & column marker disabled; auto-hardwrapping activated"
+  endif
+endfunction
 
 " Spell Checking                                 {{{2
 nnoremap <leader>s :set spell!<CR>
@@ -167,8 +182,9 @@ autocmd BufNewFile,BufReadPost *.asm set filetype=MIPS
 colorscheme molokai
 
 " Mark 81st column visible                       {{{2
-highlight ColorColumn ctermbg=magenta
-call matchadd('ColorColumn', '\%81v', 100)
+" Trying out SmartColumnColor plugin instead of the following
+" highlight ColorColumn ctermbg=magenta
+" call matchadd('ColorColumn', '\%81v', 100)
 
 " Powerline symbols!                             {{{2
 " I should add some if statement in case the plugin is not there
@@ -202,7 +218,7 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 
 nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
-autocmd BufWritePre *.c,*.h,*.rb,*.py,*.js :call <SID>StripTrailingWhitespaces()
+autocmd BufWritePre *.c,*.h,*.rb,*.py,*.js,*.hs :call <SID>StripTrailingWhitespaces()
 
 " Notes                                          {{{1
 
