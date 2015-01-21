@@ -6,7 +6,7 @@
 cd "${0:A:h}"
 
 # Set some functions ############## {{{1
-function update_repo() { git pull origin master }
+function update_repo() { git pull origin master && git submodule update --init }
 function update_submodules() { git submodule foreach git pull origin master }
 function reload_zsh() {
   source ~/.zshrc
@@ -70,7 +70,7 @@ for flag in $argv; do
   esac
 done
 # if no flag is set and $1 != "" then wrong argument written
-if [[ $argct>0 && $FLAG_FORCE=0 && $FLAG_UPDATE_REPO=0 && $FLAG_UPDATE_MODULES=0 ]]; then
+if [[ $#>0 && $FLAG_FORCE=0 && $FLAG_UPDATE_REPO=0 && $FLAG_UPDATE_MODULES=0 ]]; then
   echo "\$1:$1"
   FLAG_HELP=1
 fi

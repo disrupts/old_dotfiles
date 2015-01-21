@@ -86,6 +86,9 @@ antigen apply
 # nor zsh-autosuggestions are loaded
 # source ~/.zshbundleconf
 
+# Set ZLE extra settings ########## {{{1
+set -o INTERACTIVE_COMMENTS
+
 # Zsh VI config ### ############### {{{1
 
 # mode, e for emacs, v for vi, #### {{{2
