@@ -150,11 +150,14 @@ else: # Linux asumed
 
 
 # Get external ip
-output_curl, status = Popen(['curl', '--silent', 'https://duckduckgo.com/?q=my+ip&ia=answer'], stdout=PIPE).communicate()
-output_curl = str(output_curl, encoding='utf8')
-
-index = output_curl.index('Your IP address is ')
-external_ip = ip_regex.match(output_curl[(index+19):(index+18+16)]).group()
+NO_EXTERNAL_IP = False
+try:
+    output_curl, status = Popen(['curl', '--silent', 'https://duckduckgo.com/?q=my+ip&ia=answer'], stdout=PIPE).communicate()
+    output_curl = str(output_curl, encoding='utf8')
+    index = output_curl.index('Your IP address is ')
+    external_ip = ip_regex.match(output_curl[(index+19):(index+18+16)]).group()
+except ValueError:
+    NO_EXTERNAL_IP = True
 
 
 # Print all info
@@ -192,27 +195,39 @@ print('From which: ',            filler_from,  printable_list_of_inactive,  ' ar
 
 print(full_string)
 
+message = {}
+message['interface'] = 'Details about: '
+message['ip']        = 'Ip Adress: '
+message['gateway']   = 'Gateway: '
+message['broadcast'] = 'Broadcast IP: '
+message['net_ip']    = 'Network IP: '
+message['netmask']   = 'Subnet Mask: '
+message['mac']       = 'MAC Adress: '
+
 for info in info_interfaces:
     filler = {}
-    filler['interface'] = ''.join([' ' for i in range(total_length - len(info['interface']) - len('Details about: '))])
-    filler['ip']        = ''.join([' ' for i in range(total_length - len(info['ip'])        - len('Ip Adress: ')    )])
-    filler['gateway']   = ''.join([' ' for i in range(total_length - len(info['gateway'])   - len('Gateway: ')      )])
-    filler['broadcast'] = ''.join([' ' for i in range(total_length - len(info['broadcast']) - len('Broadcast IP: ') )])
-    filler['net_ip']    = ''.join([' ' for i in range(total_length - len(info['net_ip'])    - len('Network IP: ')   )])
-    filler['netmask']   = ''.join([' ' for i in range(total_length - len(info['netmask'])   - len('Subnet Mask: ')  )])
-    filler['mac']       = ''.join([' ' for i in range(total_length - len(info['mac'])       - len('MAC Adress: ')   )])
+    filler['interface'] = ''.join([' ' for i in range(total_length - len(info['interface']) - len(message['interface']))])
+    filler['ip']        = ''.join([' ' for i in range(total_length - len(info['ip'])        - len(message['ip']       ))])
+    filler['gateway']   = ''.join([' ' for i in range(total_length - len(info['gateway'])   - len(message['gateway']  ))])
+    filler['broadcast'] = ''.join([' ' for i in range(total_length - len(info['broadcast']) - len(message['broadcast']))])
+    filler['net_ip']    = ''.join([' ' for i in range(total_length - len(info['net_ip'])    - len(message['net_ip']   ))])
+    filler['netmask']   = ''.join([' ' for i in range(total_length - len(info['netmask'])   - len(message['netmask']  ))])
+    filler['mac']       = ''.join([' ' for i in range(total_length - len(info['mac'])       - len(message['mac']      ))])
 
-    print('Details about: ', filler['interface'],  info['interface'], sep='')
-    print('Ip Adress: ',     filler['ip'],         info['ip'],        sep='')
-    print('Gateway: ',       filler['gateway'],    info['gateway'],   sep='')
-    print('Broadcast IP: ',  filler['broadcast'],  info['broadcast'], sep='')
-    print('Network IP: ',    filler['net_ip'],     info['net_ip'],    sep='')
-    print('Subnet Mask: ',   filler['netmask'],    info['netmask'],   sep='')
-    print('MAC Adress: ',    filler['mac'],        info['mac'],       sep='')
+    print(message['interface'], filler['interface'],  info['interface'], sep='')
+    print(message['ip']       , filler['ip']       ,  info['ip']       , sep='')
+    print(message['gateway']  , filler['gateway']  ,  info['gateway']  , sep='')
+    print(message['broadcast'], filler['broadcast'],  info['broadcast'], sep='')
+    print(message['net_ip']   , filler['net_ip']   ,  info['net_ip']   , sep='')
+    print(message['netmask']  , filler['netmask']  ,  info['netmask']  , sep='')
+    print(message['mac']      , filler['mac']      ,  info['mac']      , sep='')
 
     print(full_string)
 
-filler = ''.join([' ' for i in range(total_length - len(external_ip) - len('External IP: '))])
-print('External IP: ', filler, external_ip, sep='')
+if NO_EXTERNAL_IP == False:
+    filler = ''.join([' ' for i in range(total_length - len(external_ip) - len('External IP: '))])
+    print('External IP: ', filler, external_ip, sep='')
+else:
+    print('No External IP, no Internet access.')
 
 print(full_string)

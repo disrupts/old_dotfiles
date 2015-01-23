@@ -71,7 +71,6 @@ for flag in $argv; do
 done
 # if no flag is set and $1 != "" then wrong argument written
 if [[ $#>0 && $FLAG_FORCE=0 && $FLAG_UPDATE_REPO=0 && $FLAG_UPDATE_MODULES=0 ]]; then
-  echo "\$1:$1"
   FLAG_HELP=1
 fi
 

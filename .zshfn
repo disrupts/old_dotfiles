@@ -43,19 +43,19 @@ function oyasuminasai() {
 function status() {
   case $CURRENT_OS in
   'MACOSX')
-    print "Date..:  "$(date "+%Y-%m-%d %H:%M:%S")
-    print "Shell.:  Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
-    print "Term..:  $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
-    print "Login.:  $LOGNAME (UID = $EUID) on $HOST"
-    print "System:  $(uname -rs)"
+    print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
+    print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
+    print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
+    print "Login.: $LOGNAME (UID = $EUID) on $HOST"
+    print "System: $(uname -rs)"
     print "Uptime: $(uptime)"
     ;;
   *)
-    print "Date..:  "$(date "+%Y-%m-%d %H:%M:%S")
-    print "Shell.:  Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
-    print "Term..:  $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
-    print "Login.:  $LOGNAME (UID = $EUID) on $HOST"
-    print "System:  $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)"
+    print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
+    print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
+    print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
+    print "Login.: $LOGNAME (UID = $EUID) on $HOST"
+    print "System: $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)"
     print "Uptime: $(uptime)"
     ;;
   esac
@@ -186,8 +186,13 @@ function src() {
 # reload a linux kernel module #### {{{2
 # LINUX ONLY (no modules in OpenBSD, could add FreeBSD support)
 function reprobe() {
-  sudo modprobe -r $1
-  sudo modprobe $1
+  if [[ $CURRENT_OS=='OpenBSD' || $CURRENT_OS=='MACOSX' ]]; then
+    echo "What the **** do you think you're doing?"
+    echo "Your system does NOT support kernel modules."
+  else
+    sudo modprobe -r $1
+    sudo modprobe $1
+  fi
 }
 
 # Wifi Stuf ###################### {{{2
@@ -215,6 +220,9 @@ function mute() {
   'MACOSX')   osascript -e "set Volume 0" ;;
   *)          echo "ERROR. mute NOT DEFINED FOR THIS OS."
   esac
+}
+function unmute() {
+  # IMPLEMENTATION MISSING
 }
 
 # toggle mute ##################### {{{2

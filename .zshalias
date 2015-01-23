@@ -43,12 +43,26 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
   alias binfo="brew info"
   alias get="brew install"
   alias forget="brew remove"
+  alias purge="echo 'Your are screwed, no orphan-package checking available.' && \
+               echo 'Don't bother deleting: "
   alias blist="brew list"
   alias bclean="brew cleanup"
 
 # OpenBSD ######################### {{{2
 elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
   alias pkg_search="curl $PKG_PATH\index.txt | grep_color"
+  alias pkg_update="cd /usr/ports                                         && \
+                    cvs -q up -rOPENBSD_`uname -r | sed 's/\./_/'` -Pd    && \
+                    pushd -q -1                                           && \
+                    /usr/ports/infrastructure/bin/out-of-date"
+  alias pkg_upgrade="pkg_add -u"
+
+  alias update="pkg_update"
+  alias upgrade="pkg_upgrade"
+  alias search="pkg_search"
+  alias get="pkg_add -i"
+  alias forget="pkg_delete"
+  alias purge="pkg_delete -a"
 fi
 
 # Multimedia ###################### {{{1
