@@ -2,13 +2,37 @@
 # vim: nowrap fdm=marker
 
 # Auto-detect OS ################## {{{1
+# OS detection #################### {{{2
 local UNAME=`uname`
 if [[ $UNAME == 'Darwin' ]]; then
-  CURRENT_OS='MACOSX'
+  export CURRENT_OS='MACOSX'
 else
-  CURRENT_OS=$UNAME
+  export CURRENT_OS=$UNAME
 fi
-export CURRENT_OS
+
+# OS specific detections ########## {{{2
+if [[ $CURRENT_OS == 'OpenBSD' ]]; then
+  # NOT TESTED BRANCH DETECTION
+  local KERNEL_VERSION=`sysctl | grep kern.version | grep -oE "(beta)"`
+  if [[ $KERNEL_VERSION == "beta" ]]; then
+    export BRANCH='current'
+  else
+    export BRANCH=`uname -r`
+  fi
+fi
+ 
+if [[ $CURRENT_OS == 'Linux' ]]; then
+  if [ -f /etc/debian_version ]; then
+    export DISTRO='Debian'
+  fi
+  # MISSING GENTOO DETECTION
+fi
+
+# OS specific control variables ### {{{2
+if [[ $CURRENT_OS == 'MACOSX' ]]; then
+  export PKG_TOOL='homebrew'
+fi
+
 
 # Set variables, aliases & functs # {{{1
 source ~/.zshenv      # needs CURRENT_OS
@@ -88,6 +112,7 @@ antigen apply
 
 # Set ZLE extra settings ########## {{{1
 set -o INTERACTIVE_COMMENTS
+setopt CORRECT
 
 # Zsh VI config ### ############### {{{1
 

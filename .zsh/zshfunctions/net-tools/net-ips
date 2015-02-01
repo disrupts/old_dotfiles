@@ -1,0 +1,22 @@
+# WILL DISCARD loopback INFO
+# IS IT A GOOD IDEA?
+function net-ips() {
+  local -a interface_list
+  interface_list=(`net-interfaces`)
+  local -a ip_list
+  for interface in $interface_list; do
+    case $CURRENT_OS in
+    'MACOSX')
+      if [[ "$interface" != "lo0" ]]; then
+        ip_list+=( `ifconfig $interface                            \
+                 | grep -oE "(inet [0-9]+\.[0-9]+\.[0-9]\.[0-9]+)" \
+                 | grep -oE '[^ ]+$'` )
+      fi
+      ;;
+    *)
+      ;;
+    esac
+  done
+  unset interface
+  echo $ip_list
+}

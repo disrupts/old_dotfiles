@@ -1,0 +1,29 @@
+# Local functions
+function logate-bit-AND() {
+  if   [[ ($1 == "0") && ($2 == "0") ]]; then; echo '0'
+  elif [[ ($1 == "0") && ($2 == "1") ]]; then; echo '0'
+  elif [[ ($1 == "1") && ($2 == "0") ]]; then; echo '0'
+  elif [[ ($1 == "1") && ($2 == "1") ]]; then; echo '1'
+  else; echo "ERROR: bad imput in logate-AND-bin."
+  fi
+}
+
+# Exported function
+function logate-AND-bin() {
+  local -a bin1
+  local -a bin2
+  local -a res
+  bin1=( $(echo $1 | sed 's/\(.\)/\1 /g' ) )
+  bin2=( $(echo $2 | sed 's/\(.\)/\1 /g' ) )
+  if [[ ${#bin1[@]} == ${#bin2[@]} ]]; then
+    for ((i=1; i<=${#bin1[@]}; i++)); do
+      res+=( $(logate-bit-AND ${bin1[$i]} ${bin2[$i]}) )
+    done
+    unset i
+    echo $res | sed 's/ //g'
+  else
+    echo "ERROR: bad imput in logate-AND-bin."
+  fi
+}
+
+logate-AND-bin "$@"

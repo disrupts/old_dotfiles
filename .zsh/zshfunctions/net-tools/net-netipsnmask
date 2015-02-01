@@ -1,0 +1,28 @@
+# WILL DISCARD loopback INFO
+function net-netipsnmask() {
+  local -a netip_list
+  local -a netmask_list
+  local -a scan_list
+  #local -a hex
+  local -a binary
+  local count=0
+  netip_list=( $( net-netips) )
+  netmask_list=( $( net-octal2hex $(net-netmasks) ) )
+  for ((i=1; i<=${#netip_list[@]}; i++)); do
+    # count leading ones
+    binary=( $(logate-hex2bin ${netmask_list[$i]} | sed 's/\(.\)/\1 /g') )
+    count=0
+    for elem in $binary; do
+      if [[ $elem == "1" ]]; then
+        count=$( echo "$count + 1" | bc)
+      else
+        break;
+      fi
+    done
+    # append count too netip
+    scan_list+=( "${netip_list[$i]}/$count" )
+  done
+  unset i
+  unset elem
+  echo $scan_list
+}

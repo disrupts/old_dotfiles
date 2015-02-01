@@ -70,26 +70,26 @@ for flag in $argv; do
   esac
 done
 # if no flag is set and $1 != "" then wrong argument written
-if [[ $#>0 && $FLAG_FORCE=0 && $FLAG_UPDATE_REPO=0 && $FLAG_UPDATE_MODULES=0 ]]; then
+if [[ $argct>0 && $FLAG_FORCE==0 && $FLAG_UPDATE_REPO==0 && $FLAG_UPDATE_MODULES==0 ]]; then
   FLAG_HELP=1
 fi
 
-if [[ $FLAG_HELP = 1 ]]; then
+if [[ $FLAG_HELP == 1 ]]; then
   print_help
   unset_functions
   exit 0
 fi
 
-if [[ $FLAG_UPDATE_REPO = 1 ]]; then
+if [[ $FLAG_UPDATE_REPO == 1 ]]; then
   echo "Updating dotfiles..."
   update_repo
 fi
-if [[ $FLAG_UPDATE_MODULES = 1 ]]; then
+if [[ $FLAG_UPDATE_MODULES == 1 ]]; then
   echo "Updating git submodules..."
   update_submodules
 fi
 
-if [[ $FLAG_FORCE = 1 ]]; then
+if [[ $FLAG_FORCE == 1 ]]; then
   echo "Forced dotfiles sync."
   sync_dotfiles
 else

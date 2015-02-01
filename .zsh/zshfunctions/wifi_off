@@ -1,0 +1,10 @@
+function wifi_off() {
+  # get wireless interface list
+  local -a interface_list
+  interface_list=(`net-wireless_interfaces`)
+  # pull them all down
+  for interface in $interface_list; do
+    sudo ifconfig $interface down
+  done
+  unset interface
+}

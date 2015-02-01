@@ -1,0 +1,7 @@
+function oyasuminasai() {
+  case $CURRENT_OS in
+  'OpenBSD')  sudo shutdown -hp now ;;
+  'FreeBSD')  sudo shutdown -p now  ;;
+  *)          sudo shutdown -h now  ;;
+  esac
+}

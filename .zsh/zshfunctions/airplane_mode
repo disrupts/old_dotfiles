@@ -1,0 +1,8 @@
+function airplane_mode() {
+  local -a interface_list
+  interface_list=(`net-interfaces`)
+  for interface in $interface_list; do
+    sudo ifconfig $interface down
+  done
+  unset interface
+}

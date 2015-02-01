@@ -1,0 +1,7 @@
+# toggles mute
+function mutet() {
+  case $CURRENT_OS in
+  'OpenBSD')  mixerctl outputs.master.mute=toggle ;;
+  *)          echo "ERROR. mutet NOT DEFINED FOR THIS OS."
+  esac
+}

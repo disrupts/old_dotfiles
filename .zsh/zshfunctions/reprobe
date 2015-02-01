@@ -1,0 +1,13 @@
+# reloads a linux kernel module
+function reprobe() {
+  case $CURRENT_OS in
+  'OpenBSD' | 'MACOSX')
+    echo "What the **** do you think you're doing?"
+    echo "Your system does NOT support kernel modules."
+	;;
+  *)
+    sudo modprobe -r $1
+    sudo modprobe $1
+	;;
+  esac
+}

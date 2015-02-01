@@ -1,0 +1,15 @@
+function net-wireless_interfaces() {
+  local INTERFACES=""
+  case $CURRENT_OS in
+  'MACOSX') INTERFACES=`networksetup -listallhardwareports | grep Wi-Fi -A 2 | grep Device | grep -oE "([a-z]+[0-9])"` ;;
+  *)        INTERFACES=`iwconfig -a | grep -oE "(([a-z]|[0-9])+[0-9]\\t)"` ;;
+  esac
+  # replaces \n separator with ' ' only if necessary
+  local GREPPED=$(echo $INTERFACES | grep " " )
+  if [[ "$GREPPED" == "$INTERFACES" ]]
+  then
+    INTERFACES=`echo $INTERFACES | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g'`
+  fi
+  # print the result
+  echo $INTERFACES
+}

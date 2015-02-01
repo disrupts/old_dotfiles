@@ -1,0 +1,11 @@
+function status() {
+  print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
+  print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
+  print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
+  print "Login.: $LOGNAME (UID = $EUID) on $HOST"
+  case $CURRENT_OS in
+  'MACOSX') print "System: $(uname -rs)" ;;
+  *)        print "System: $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)" ;;
+  esac
+  print "Uptime: $(uptime)"
+}

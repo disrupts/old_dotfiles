@@ -1,0 +1,15 @@
+# Local function slow_random
+# outputs random values 64 bits at a time,
+# a sleep value between each must be specified
+function slow_random() {
+  while true; do
+    echo -n $(head -n 16 /dev/urandom)
+    sleep $1
+  done
+}
+
+# Exported function look_busy
+# prints that infinite stream of bits formated
+function look_busy() { slow_random 0.1 | hexdump -C }
+
+look_busy "$@"

@@ -127,7 +127,7 @@ if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
         index = text.index('ether')
         mac   = text[(index+5):(index+5+14)]
 
-        output_route = check_output(['route','get', 'duckduckgo.com'])
+        output_route = check_output(['route','-n','get', 'duckduckgo.com'])
         output_route = str(output_route, encoding='utf8')
         index        = output_route.index('gateway:')
         gateway      = ip_regex.match(output_route[(index+9):(index+9+13)]).group()

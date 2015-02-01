@@ -1,0 +1,15 @@
+function net-interfaces() {
+  # Gets a rough version, with separtors (: or \t) not cleaned yet
+  # and separated by \n
+  local INTERFACES=""
+  case $CURRENT_OS in
+  'MACOSX') INTERFACES=`ifconfig | grep -oE "(([a-z]|[0-9])+[0-9]\:\ )"` ;;
+  *)        INTERFACES=`ifconfig | grep -oE "(([a-z]|[0-9])+[0-9]\\t)"`  ;;
+  esac
+  # cleans the rough list
+  INTERFACES=`echo $INTERFACES | grep -oE "(([a-z]|[0-9])+[0-9])"`
+  # replaces \n separator with ' '
+  INTERFACES=`echo $INTERFACES | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g'`
+  # print the result
+  echo $INTERFACES
+}

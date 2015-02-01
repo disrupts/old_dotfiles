@@ -1,0 +1,5 @@
+# make folder and chdir into it
+function mkcd() {
+  mkdir -p "$@"
+  cd "$@"
+}

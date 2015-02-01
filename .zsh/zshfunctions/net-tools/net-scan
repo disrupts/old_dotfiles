@@ -1,0 +1,9 @@
+function net-scan() {
+  local -a scan_list
+  scan_list=( $(net-netipsnmask) )
+  for elem in $scan_list; do
+    echo "Scanning: $elem"
+    nmap $elem -sP
+  done
+  unset elem
+}

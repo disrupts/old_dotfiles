@@ -1,0 +1,16 @@
+# Exported function
+function logate-NOT-bin() {
+  for x do;
+    local -a bin_array
+    bin_array=( $(echo $x | sed 's/\(.\)/\1 /g') )
+    for bin in $bin_array; do
+      if   [[ ($bin == "1") ]]; then; printf '0'
+      elif [[ ($bin == "0") ]]; then; printf '1'
+      else; echo "ERROR: bad imput in logate-NOT."
+      fi
+    done
+    printf ' '
+  done
+  echo ""
+  unset $x
+}

@@ -17,14 +17,14 @@ export SAVEHIST=10000
 export EDITOR="vim"
 export BROWSER="firefox"
 
-# Setting PATH #################### {{{1
+# Setting PATH & FPATH ############ {{{1
 # PATH Elements ################### {{{2
 local MAC_HOMESCRIPTS="/Users/$USER/.bin_scripts"
 local MAC_BASIC="/usr/bin:/usr/sbin:/bin:/sbin"
 local MAC_RUBIES="/usr/local/opt/ruby/bin"          # brew ruby gems
 local MAC_LATEX="/usr/texbin"                       # brew latex
 local MAC_BREW="/usr/local/bin:/usr/local/sbin"     # Main brew location
-local MAC_XORG="usr/X11/bin/"                       # Xquartz & brew Xorg apps
+local MAC_XORG="/usr/X11/bin/"                      # Xquartz & brew Xorg apps
 local MAC_PKGSRC="/Users/$USER/pkg/bin:/Users/$USER/pkg/sbin"
 
 # PATH export ##################### {{{2
@@ -32,9 +32,20 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
   export PATH="$MAC_RUBIES:$MAC_BREW:$MAC_PKGSRC:$MAC_LATEX:$MAC_BASIC:$MAC_XORG:$MAC_HOMESCRIPTS:$PATH"
 fi
 
+# FPATH export #################### {{{2
+fpath=(
+  $HOME/.zsh/zshfunctions/
+  $HOME/.zsh/zshfunctions/**/
+  "${fpath[@]}"
+)
+
 # Set Package Repo for OpenBSD #### {{{1
 if [[ $CURRENT_OS == 'OpenBSD' ]]; then
-  export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`/
+  if [[ $BRANCH == 'current' ]]; then
+    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`arch -s`/
+  else
+    export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`/
+  fi
 fi
 
 # App specific configs ############ {{{1

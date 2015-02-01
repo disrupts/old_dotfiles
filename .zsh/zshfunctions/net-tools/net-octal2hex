@@ -1,0 +1,9 @@
+function net-octal2hex() {
+  local -a list
+  list=( $(echo $1 | sed 's/\./ /g') )
+  for elem in $list; do
+    printf '%02X' $elem
+  done
+  unset elem
+  echo ""
+}

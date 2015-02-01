@@ -1,0 +1,4 @@
+# jump to previous directory
+function back() {
+  pushd -q -$1
+}

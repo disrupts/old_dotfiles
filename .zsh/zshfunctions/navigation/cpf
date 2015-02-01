@@ -1,0 +1,8 @@
+# copy & follow file to new dir
+function cpf() {
+  if [[ -d $*[-1] ]]; then
+    cp $* && cd $*[-1]
+  elif [[ -d ${*[-1]%/*} ]]; then
+    cp $* && cd ${*[-1]%/*}
+  fi
+}

@@ -1,0 +1,8 @@
+# move & follow file to new dir
+function mvf() {
+  if [[ -d $*[-1] ]]; then
+    mv $* && cd $*[-1]
+  elif [[ -d ${*[-1]%/*} ]]; then
+    mv $* && cd ${*[-1]%/*}
+  fi
+}

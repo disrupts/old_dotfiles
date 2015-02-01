@@ -1,0 +1,8 @@
+# mutes everything
+function mute() {
+  case $CURRENT_OS in
+  'OpenBSD')  mixerctl outputs.master.mute=on ;;
+  'MACOSX')   osascript -e "set Volume 0" ;;
+  *)          echo "ERROR: mute NOT DEFINED FOR THIS OS."
+  esac
+}

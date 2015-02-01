@@ -1,0 +1,4 @@
+# unmutes if muted
+function unmute() {
+  # IMPLEMENTATION MISSING
+}

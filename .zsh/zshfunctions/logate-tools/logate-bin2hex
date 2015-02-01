@@ -1,0 +1,43 @@
+# Local functions
+function logate-nib-bin2hex() {
+  if   [[ $1 == "0000" ]]; then; echo "0"
+  elif [[ $1 == "0001" ]]; then; echo "1"
+  elif [[ $1 == "0010" ]]; then; echo "2"
+  elif [[ $1 == "0011" ]]; then; echo "3"
+  elif [[ $1 == "0100" ]]; then; echo "4"
+  elif [[ $1 == "0101" ]]; then; echo "5"
+  elif [[ $1 == "0110" ]]; then; echo "6"
+  elif [[ $1 == "0111" ]]; then; echo "7"
+  elif [[ $1 == "1000" ]]; then; echo "8"
+  elif [[ $1 == "1001" ]]; then; echo "9"
+  elif [[ $1 == "1010" ]]; then; echo "a"
+  elif [[ $1 == "1011" ]]; then; echo "b"
+  elif [[ $1 == "1100" ]]; then; echo "c"
+  elif [[ $1 == "1101" ]]; then; echo "d"
+  elif [[ $1 == "1110" ]]; then; echo "e"
+  elif [[ $1 == "1111" ]]; then; echo "f"
+  else; echo "ERROR: bad imput in logate-bin2hex."
+  fi
+}
+
+# Exported function
+function logate-bin2hex() {
+  local i=1
+  local -a binarray
+  local -a hexres
+  for x; do
+    binarray=( $(echo $x | sed 's/\(.\)/\1 /g') )
+    hexres=( )
+    for ((i=1; i<=${#binarray[@]}; i+=4)); do
+      local j=$(echo "$i+1" | bc)
+      local k=$(echo "$i+2" | bc)
+      local l=$(echo "$i+3" | bc)
+      hexres+=( $(logate-nib-bin2hex ${binarray[$i]}${binarray[$j]}${binarray[$k]}${binarray[$l]}) )
+    done
+    echo $hexres | sed 's/ //g' | tr '\n' ' '
+  done
+  echo ""
+  unset x
+}
+
+logate-bin2hex "$@"

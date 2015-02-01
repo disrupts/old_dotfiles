@@ -1,0 +1,4 @@
+# make a backup copy
+function cpb() {
+  cp "$@"{,.back}
+}

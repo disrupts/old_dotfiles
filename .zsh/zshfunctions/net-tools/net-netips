@@ -1,0 +1,12 @@
+# WILL DISCARD loopback INFO
+function net-netips() {
+  local -a ip_list
+  local -a netmask_list
+  local -a netip_list
+  ip_list=(      $( net-octal2hex $(net-ips) )      )
+  netmask_list=( $( net-octal2hex $(net-netmasks) ) )
+  for ((i=1; i<=${#ip_list[@]}; i++)); do
+    netip_list+=( $( net-hex2octal $(logate-AND-hex ${ip_list[$i]} ${netmask_list[$i]}) ) )
+  done
+  echo $netip_list
+}

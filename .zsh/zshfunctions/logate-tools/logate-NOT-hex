@@ -1,0 +1,9 @@
+# Exported function
+function logate-NOT-hex() {
+  for x; do
+    printf $(logate-bin2hex $(logate-NOT-bin $(logate-hex2bin $x)))
+    printf ' '
+  done
+  echo ""
+  unset x
+}

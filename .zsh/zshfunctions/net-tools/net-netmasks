@@ -1,0 +1,26 @@
+# WILL DISCARD loopback INFO
+function net-netmasks() {
+  local -a interface_list
+  interface_list=(`net-interfaces`)
+  local -a ip_list
+  local -a temp_list
+  case $CURRENT_OS in
+  'MACOSX')
+    for interface in $interface_list; do
+      if [[ "$interface" != "lo0" ]]; then
+        temp_list+=( $(ifconfig $interface                   \
+                     | grep -oE "(netmask 0x([0-9]|[a-f])+)" \
+                     | grep -oE "[^ ]+$") )
+      fi
+    done
+    unset interface
+    for ip in $temp_list; do
+      ip_list+=( $(net-hex2octal $(echo $ip | grep -oE "(([0-9]|[a-f]){8})")) )
+    done
+    unset ip
+    echo $ip_list
+    ;;
+  *)
+    ;;
+  esac
+}

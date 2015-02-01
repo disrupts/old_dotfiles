@@ -1,0 +1,4 @@
+function n() {
+  local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
+  ${EDITOR} "${files[@]}"
+}

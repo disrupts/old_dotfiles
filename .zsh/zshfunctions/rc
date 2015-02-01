@@ -1,0 +1,9 @@
+function rc() {
+  case $CURRENT_OS in
+  #'Ubuntu')  service $2 $1
+  #'Systemd') systemctl $1 $2
+  #'FreeBSD') sysrc $something $something
+  'MACOSX') launchctl $1 $2;;
+  *)        /etc/rc.d/$2 $1;;
+  esac
+}

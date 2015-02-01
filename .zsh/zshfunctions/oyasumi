@@ -1,0 +1,6 @@
+function oyasumi() {
+  case $CURRENT_OS in
+  'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
+  *)          sudo shutdown -s now ;;
+  esac
+}

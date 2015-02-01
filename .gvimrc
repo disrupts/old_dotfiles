@@ -3,7 +3,7 @@
 " My mods to gvimrc                              {{{1
 " Preferences                                    {{{2
 set guioptions-=T   "remove the toolbar
-set guifont=Inconsolata-dz\ for\ Powerline
+set guifont=Inconsolata-g\ for\ Powerline
 " Colourschemes                                  {{{2
 " Default colour for MacVim to blue!
 colorscheme blue

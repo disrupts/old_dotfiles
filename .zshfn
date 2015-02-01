@@ -1,7 +1,16 @@
 # zshfn at $HOME/.zshfn ##########
-# some functions from xfausto at github.com/xfausto/dotfiles
+#
+# Some functions are based on 2014's https://github.com/xfausto/dotfiles/blob/master/zshfn
 # japanese-daytimes is inspired by https://github.com/klein2de/japanese-daytimes
+#
 # vim: nowrap fdm=marker
+
+# function path is set in .zshenv to:
+#   fpath=(
+#     $HOME/.zsh/zshfunctions/
+#     $HOME/.zsh/zshfunctions/**/
+#     "${fpath[@]}"
+#   )
 
 # grep & ls coloured ############## {{{1
 # makes the other function OS independent with colour enabled by default
@@ -20,300 +29,109 @@ esac
 # There is no function for Hibernation until I find a name for it
 # It would be better to change the others to and keep only oyasumi
 # Suspend now (sleep) ############# {{{2
-function oyasumi() {
-  case $CURRENT_OS in
-  'OpenBSD')  zzz ;; # not sure if root priviledges are necesary, ZZZ hybernates
-  *)          sudo shutdown -s now ;;
-  esac
-}
-
+autoload -Uz oyasumi
 # shutdown now #################### {{{2
-function oyasuminasai() {
-  case $CURRENT_OS in
-  'OpenBSD')  sudo shutdown -hp now ;;
-  'FreeBSD')  sudo shutdown -p now  ;;
-  *)          sudo shutdown -h now  ;;
-  esac
-}
-
+autoload -Uz oyasuminasai
 
 # Status info (net & system) ###### {{{1
-# net has been moved to .bin_scripts
-# simple status info ############## {{{2
-function status() {
-  case $CURRENT_OS in
-  'MACOSX')
-    print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
-    print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
-    print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
-    print "Login.: $LOGNAME (UID = $EUID) on $HOST"
-    print "System: $(uname -rs)"
-    print "Uptime: $(uptime)"
-    ;;
-  *)
-    print "Date..: "$(date "+%Y-%m-%d %H:%M:%S")
-    print "Shell.: Zsh $ZSH_VERSION (PID = $$, $SHLVL nests)"
-    print "Term..: $TTY ($TERM), ${BAUD:+$BAUD bauds, }$COLUMNS x $LINES chars"
-    print "Login.: $LOGNAME (UID = $EUID) on $HOST"
-    print "System: $(cat /etc/[A-Za-z]*[_-][rv]e[lr]*)"
-    print "Uptime: $(uptime)"
-    ;;
-  esac
-}
+# netinfo has been moved to .bin_scripts
+autoload -Uz status # simple status info 
 
-
-# RC.D daemon functions ########### {{{1
-# defines rc function to be OS-aware
-# and rcstart, rcstop, rcreload, rcrestart, rccheck that call the rc function
-function rc() {
-  case $CURRENT_OS in
-  #'Ubuntu') service $2 $1
-  #'Systemd') systemctl $1 $2
-  'MACOSX') launchctl $1 $2;;
-  *)        /etc/rc.d/$2 $1;;
-  esac
-}
-function rcstart()   { rc start   $1; }
-function rcstop()    { rc stop    $1; }
-function rcreload()  { rc reload  $1; }
-function rcrestart() { rc restart $1; }
-function rccheck()   { rc check   $1; }
+# # RC.D daemon functions ########### {{{1
+# # defines rc function to be OS-aware
+# # and rcstart, rcstop, rcreload, rcrestart, rccheck that call the rc function
+autoload -Uz rc
+# function rcstart()   { rc start   $1 }
+# function rcstop()    { rc stop    $1 }
+# function rcreload()  { rc reload  $1 }
+# function rcrestart() { rc restart $1 }
+# function rccheck()   { rc check   $1 }
+alias rcstart="   rc start   "
+alias rcstop="    rc stop    "
+alias rcreload="  rc reload  "
+alias rcrestart=" rc restart "
+alias rccheck="   rc check   "
 
 
 # File & folder navigation ######## {{{1
-# go up X amount of directories ### {{{2
-function up() {
-  local arg=${1:-1};
-  while [ $arg -gt 0 ]; do
-    cd .. >&/dev/null;
-    arg=$(($arg - 1));
-  done
-}
-
-# jump to previous directory ###### {{{2
-function back() {
-  pushd -q -$1
-}
-
-# copy & follow file to new dir ### {{{2
-function cpf() {
-  if [[ -d $*[-1] ]]; then
-    cp $* && cd $*[-1]
-  elif [[ -d ${*[-1]%/*} ]]; then
-    cp $* && cd ${*[-1]%/*}
-fi
-}
-
-# move & follow file to new dir ### {{{2
-function mvf() {
-  if [[ -d $*[-1] ]]; then
-    mv $* && cd $*[-1]
-  elif [[ -d ${*[-1]%/*} ]]; then
-    mv $* && cd ${*[-1]%/*}
-fi
-}
-
-# make folder and chdir into it ### {{{2
-function mkcd() {
-  mkdir -p "$@"
-  cd "$@"
-}
-
-# make a backup copy ############## {{{2
-function cpb() {
-  cp "$@"{,.back}
-}
+autoload -Uz up back cpf mvf mkcd cpb
+# up:   go up X amount of directories
+# back: jump to previous directory
+# cpf:  copy & follow file to new dir
+# mvf:  move & follow file to new dir
+# mkcd: make folder and chdir into it
+# cpb:  make a backup copy
 
 
 # Other system utilities ########## {{{1
 # extract archive ################# {{{2
-# old name was extr
-function extract() {
-  if [ -f $1 ] ; then
-    case $1 in
-    *.tar.bz2) tar xjf    $1 ;;
-    *.tar.gz)  tar xzf    $1 ;;
-    *.bz2)     bunzip2    $1 ;;
-    *.rar)     unrar e    $1 ;;
-    *.gz)      gunzip     $1 ;;
-    *.tar)     tar xf     $1 ;;
-    *.tbz2)    tar xjf    $1 ;;
-    *.tgz)     tar xzf    $1 ;;
-    *.zip)     unzip      $1 ;;
-    *.Z)       uncompress $1 ;;
-    *.7z)      7z x       $1 ;;
-    *.xz)      unxz -vk   $1 ;;
-    *.lzma)    unlzma -vk $1 ;;
-    *) echo "'$1' cannot be extracted via extr()" ;;
-    esac
-  else
-    echo "'$1' is not a valid file"
-fi
-}
+# NOT FINISHED, SHOULD TO TRY ATOOL
+autoload -Uz extract
 
 # any instance of process ######### {{{2
-function any() {
-  emulate -L zsh
-  unsetopt KSH_ARRAYS
-  if [[ -z "$1" ]] ; then
-    echo "any - grep for process(es) by keyword" >&2
-    echo "Usage: any " >&2 ; return 1
-  else
-    ps xauwww | grep_color -i "[${1[1]}]${1[2,-1]}"
-  fi
-}
+autoload -Uz any
 
 # find colored #################### {{{2
 # LINUX ONLY OPTION
 # find -iregex not on openBSD (maybe FreeBSD)
 # xargs has no -r option in MACOSX
-function f() {
-  find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_color -1d
-}
+autoload -Uz f
 
 # reload zshrc #################### {{{2
-# NEED TO CHECK WHAT THIS DOES, source .zshrc SHOULD BE ENOUGH?
-function src() {
-  autoload -U zrecompile
-    [ -f ~/.zshrc ] && zrecompile -p ~/.zshrc
-    [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
-    [ -f ~/.zcompdump ] && zrecompile -p ~/.zcompdump
-    [ -f ~/.zshrc.zwc.old ] && rm -f ~/.zshrc.zwc.old
-    [ -f ~/.zcompdump.zwc.old ] && rm -f ~/.zcompdump.zwc.old
-    source ~/.zshrc
-}
+# should zshalias and zshenv be zompiled?
+autoload -Uz src
 
 # reload a linux kernel module #### {{{2
-# LINUX ONLY (no modules in OpenBSD, could add FreeBSD support)
-function reprobe() {
-  if [[ $CURRENT_OS=='OpenBSD' || $CURRENT_OS=='MACOSX' ]]; then
-    echo "What the **** do you think you're doing?"
-    echo "Your system does NOT support kernel modules."
-  else
-    sudo modprobe -r $1
-    sudo modprobe $1
-  fi
-}
+autoload -Uz reprobe
 
-# Wifi Stuf ###################### {{{2
-function list_wireless_interfaces() {
-  case $CURRENT_OS in
-  'MACOSX') echo 'en1' ;;
-  *)        iwconfig -a | grep -oE (([a-z]+[0-9]+\\t) ;;
-  esac
-}
-function wifi_off() {
-  # get wireless interface list
-  local interface_list=`list_wireless_interfaces`
-  # pull them all down
-  for interface in $interface_list; do
-    sudo ifconfig $interface down
-  done
-}
+# Net Stuf ######################## {{{2
 
+# Logic Gate functions ############
+autoload -Uz  logate-bin2hex  logate-hex2bin  \
+              logate-NOT-bin  logate-NOT-hex  \
+              logate-AND-bin  logate-AND-hex  \
+              logate-OR-bin   logate-OR-hex   \
+              logate-NAND-bin logate-NAND-hex \
+              logate-NOR-bin  logate-NOR-hex  \
+              logate-XOR-bin  logate-XOR-hex  \
+              logate-XNOR-bin logate-XNOR-hex
+
+# Net functions ###################
+autoload -Uz  net-hex2octal  net-octal2hex           \
+              net-interfaces net-wireless_interfaces \
+              net-ips        net-netmasks            \
+              net-netips     net-netipsnmask         \
+              net-scan       net-deepscan
+
+autoload -Uz  wifi_off airplane_mode
 
 # Sound ########################### {{{1
-# mute everything ################# {{{2
-function mute() {
-  case $CURRENT_OS in
-  'OpenBSD')  mixerctl outputs.master.mute=on ;;
-  'MACOSX')   osascript -e "set Volume 0" ;;
-  *)          echo "ERROR. mute NOT DEFINED FOR THIS OS."
-  esac
-}
-function unmute() {
-  # IMPLEMENTATION MISSING
-}
+autoload -Uz mute unmute mutet
+# mute:    mutes all sounds
+# unmute:  unmutes all sounds if necessary    IMPLEMENTATION MISSING
+# mutet:   toggles gobal mute state           ANOTHER NAME WOULD BE BETTER
 
-# toggle mute ##################### {{{2
-function mutet() {
-  case $CURRENT_OS in
-  'OpenBSD')  mixerctl outputs.master.mute=toggle ;;
-  *)          echo "ERROR. mutet NOT DEFINED FOR THIS OS."
-  esac
-}
 
 # set of 10 channel EQ functions ## {{{2
 # EQ SETUPS NEED TO BE SET TO TASTE
-function seteq() {
-  case $CURRENT_OS in
-  'OpenBSD')
-    ;;
-  'FreeBSD')
-    ;;
-  'MACOSX')
-    ;;
-  *)
-    amixer -D equal -q set '01. 31 Hz'  $1
-    amixer -D equal -q set '02. 63 Hz'  $2
-    amixer -D equal -q set '03. 125 Hz' $3
-    amixer -D equal -q set '04. 250 Hz' $4
-    amixer -D equal -q set '05. 500 Hz' $5
-    amixer -D equal -q set '06. 1 kHz'  $6
-    amixer -D equal -q set '07. 2 kHz'  $7
-    amixer -D equal -q set '08. 4 kHz'  $8
-    amixer -D equal -q set '09. 8 kHz'  $9
-    amixer -D equal -q set '10. 16 kHz' ${10}
-    ;;
-  esac
-}
+autoload -Uz seteq
 
-function Speakers()  { seteq 80 70 65 60 60 60 60 80 80 80; }
-function Notebook()  { seteq 00 75 75 70 50 50 60 70 85 85; }
-function Disable()   { seteq 66 66 66 66 66 66 66 66 66 66; }
-function rocks()     { seteq 91 67 39 36 37 47 53 63 67 75: }
+# function Speakers()  { seteq 80 70 65 60 60 60 60 80 80 80; }
+# function Notebook()  { seteq 00 75 75 70 50 50 60 70 85 85; }
+# function Disable()   { seteq 66 66 66 66 66 66 66 66 66 66; }
+# function rocks()     { seteq 91 67 39 36 37 47 53 63 67 75: }
+alias Speakers=" seteq 80 70 65 60 60 60 60 80 80 80 "
+alias Notebook=" seteq 00 75 75 70 50 50 60 70 85 85 "
+alias Disable="  seteq 66 66 66 66 66 66 66 66 66 66 "
+alias rocks="    seteq 91 67 39 36 37 47 53 63 67 75 "
 
 
 # Nyan ############################ {{{1
-# show 256 colours ################ {{{2
-# this one is useful to check terminal emulator compatibility
-function 256co() {
-  perl -e 'foreach $i (0..255) {printf("\e[38;5;$i"."m%03d\e[0m ",$i); }'
-}
+autoload -Uz 256colours new-scratch look_busy japanese-daytimes
+# 256colours:        useful to check terminal emulator compatibility
+# new-scratch:       creates a new scratch directory
+# look-busy:         random hex to look cool
+# japanese-daytimes: shows a greeting in japanese according to current time 
 
-# Scratch directory ############### {{{2
-function new-scratch {
-  cur_dir="$HOME/scratch"
-  new_dir="$HOME/tmp/scratch-`date +'%s'`"
-  mkdir -p $new_dir
-  ln -nfs $new_dir $cur_dir
-  cd $cur_dir
-  echo "New scratch dir ready for grinding ;>"
-}
-
-# Look busy ####################### {{{2
-# LINUX ONLY COMMAND, seq not in OpenBSD
-function random_hex() { for i in $(seq 1 2); do echo -n $(echo "obase=16; $(($RANDOM # % 16))" | bc | tr '[A-Z]' '[a-z]'); done; }
-function look_busy() { clear; while true; do head -n 500 /dev/urandom | hexdump -C | grep_color "`random_hex` `random_hex`"; done; }
-
-# japanese-daytimes ############### {{{2
-function japanese-daytimes() {
-  local HOUR=`date +"%H"`
-  if [[ $HOUR == '22' || $HOUR == '23' || $HOUR == '0' || $HOUR == '1' || $HOUR == '2' || $HOUR == '3' ]]; then
-    local JAPANESE_GREETING="おやすみなさい"
-  elif [[ $HOUR == '4' || $HOUR == '5' || $HOUR == '6' || $HOUR == '7' || $HOUR == '8' || $HOUR == '9' ]]; then
-    local JAPANESE_GREETING="おはようございます"
-  elif [[ $HOUR == '10' || $HOUR == '11' || $HOUR == '12' || $HOUR == '13' || $HOUR == '14' || $HOUR == '15' || $HOUR == '16' ]]; then
-    local JAPANESE_GREETING="こんにちわ"
-  elif [[ $HOUR == '17' || $HOUR == '18' || $HOUR == '19' || $HOUR == '20' || $HOUR == '21' ]]; then
-    local JAPANESE_GREETING="こんばんは"
-  else
-    local JAPANESE_GREETING="OUT-OF-BOUND HOUR REACHED."
-  fi
-  echo $JAPANESE_GREETING
-}
-
-# un-smart function for his todo lists {{{2
 # I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
-function n() {
-  local arg files=(); for arg; do files+=( ~/".notes/$arg" ); done
-  ${EDITOR} "${files[@]}"
-}
-
-function nls() {
-  tree -CR --noreport $HOME/.notes | awk '{
-    if (NF==1) print $1;
-    else if (NF==2) print $2;
-    else if (NF==3) printf "  %s\n", $3
-    }'
-}
+autoload -Uz n nls

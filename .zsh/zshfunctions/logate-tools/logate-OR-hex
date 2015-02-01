@@ -1,0 +1,29 @@
+# Local functions
+function logate-bit-OR() {
+  if   [[ ($1 == "0") && ($2 == "0") ]]; then; echo '0'
+  elif [[ ($1 == "0") && ($2 == "1") ]]; then; echo '1'
+  elif [[ ($1 == "1") && ($2 == "0") ]]; then; echo '1'
+  elif [[ ($1 == "1") && ($2 == "1") ]]; then; echo '1'
+  else; echo "ERROR: bad imput in logate-OR-bin."
+  fi
+}
+
+# Exported function
+function logate-OR-hex() {
+  local -a hex1
+  local -a hex2
+  local -a res
+  hex1=( $(logate-hex2bin $1 | sed 's/\(.\)/\1 /g' ) )
+  hex2=( $(logate-hex2bin $2 | sed 's/\(.\)/\1 /g' ) )
+  if [[ ${#hex1[@]} == ${#hex2[@]} ]]; then
+    for ((i=1; i<=${#hex1[@]}; i++)); do
+      res+=( $(logate-bit-OR ${hex1[$i]} ${hex2[$i]}) )
+    done
+    unset i
+    logate-bin2hex $(echo $res | sed 's/ //g')
+  else
+    echo "ERROR: bad imput in logate-OR-hex."
+  fi
+}
+
+logate-OR-hex "$@"

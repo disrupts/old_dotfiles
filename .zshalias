@@ -10,7 +10,9 @@
 alias top='htop'
 
 # Internet ######################## {{{1
-alias ip="curl ip.appspot.com"
+alias ip="curl --silent \"https://duckduckgo.com/?q=my+ip&ia=answer\"  \
+        | grep -oE \"(Your IP address is ([0-9]+\.){3}[0-9]+)\"        \
+        | grep -oE \"(([0-9]+\.){3}[0-9]+)\"" # could be "| cut -d ' ' -f5"
 alias who="lsof -P -i -n"
 alias ping='ping -c 5'
 alias pingnodns='ping -c 5 8.8.8.8'
@@ -26,35 +28,46 @@ alias home="cd ~"  # same as 'cd' with no arguments
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
 
   # Install and update [MacPorts] ### {{{3
-  #alias update="sudo port -v selfupdate"
-  #alias upgrade="sudo port -v upgrade outdated"
-  #alias search="port -v search"
-  #alias pinfo="port -v info"
-  #alias get="sudo port -v install"
-  #alias forget="sudo port -v uninstall --follow-dependencies"
-  #alias plist="port -v installed"
-  #alias pclean="sudo port clean --all installed"
-  #alias prmold="sudo port -f uninstall inactive"
+  if [[ $PKG_TOOL == 'MacPorts' ]]; then
+    alias update="sudo port -v selfupdate"
+    alias upgrade="sudo port -v upgrade outdated"
+    alias search="port -v search"
+    alias pinfo="port -v info"
+    alias get="sudo port -v install"
+    alias forget="sudo port -v uninstall --follow-dependencies"
+    alias plist="port -v installed"
+    alias pclean="sudo port clean --all installed"
+    alias prmold="sudo port -f uninstall inactive"
 
   # Install and update [Homebrew] ### {{{3
-  alias update="brew update"
-  alias upgrade="brew upgrade"
-  alias search="brew search"
-  alias binfo="brew info"
-  alias get="brew install"
-  alias forget="brew remove"
-  alias purge="echo 'Your are screwed, no orphan-package checking available.' && \
-               echo 'Don't bother deleting: "
-  alias blist="brew list"
-  alias bclean="brew cleanup"
+  elif [[ $PKG_TOOL == 'homebrew' ]]; then
+    alias update="brew update"
+    alias upgrade="brew upgrade"
+    alias search="brew search"
+    alias binfo="brew info"
+    alias get="brew install"
+    alias forget="brew remove"
+    alias purge="echo 'Your are screwed, no orphan-package checking available.' && \
+                 echo 'Don't bother deleting: "
+    alias blist="brew list"
+    alias bclean="brew cleanup"
+  fi
 
 # OpenBSD ######################### {{{2
 elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
   alias pkg_search="curl $PKG_PATH\index.txt | grep_color"
-  alias pkg_update="cd /usr/ports                                         && \
-                    cvs -q up -rOPENBSD_`uname -r | sed 's/\./_/'` -Pd    && \
-                    pushd -q -1                                           && \
-                    /usr/ports/infrastructure/bin/out-of-date"
+  function pkg_update() {
+    # Update ports via AnonCVS
+    cd /usr/ports
+    if [[ $BRANCH == 'current' ]]; then
+      cvs -q up -Pd
+    else
+      cvs -q up -rOPENBSD_`uname -r | sed 's/\./_/'` -Pd
+    fi
+    pushd -q -1
+    # Check if packages are out of date
+    /usr/ports/infrastructure/bin/out-of-date
+  }
   alias pkg_upgrade="pkg_add -u"
 
   alias update="pkg_update"
@@ -65,12 +78,23 @@ elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
   alias purge="pkg_delete -a"
 fi
 
+# Copy & Paste #################### {{{1
+if [[ $CURRENT_OS == 'MACOSX' ]]; then
+  alias pop="pbpaste"
+  alias push="pbcopy"
+fi
+
 # Multimedia ###################### {{{1
 alias play_dvd="mplayer -vo xv dvdnav://"
 alias play="mplayer"
+function streamclip()         { mplayer $(pop) }
+function streamyt()           { youtube-dl $1 -o - | mplayer - }
+function streamyt-audio()     { youtube-dl $1 -o - | mplayer -novideo - }
+function streamytclip()       { streamyt $(pop) }
+function streamyt-audioclip() {streamyt-audio $(pop) }
 
 # dvtm changing meta key ########## {{{1
-alias dvtm="dvtm -m '^a'"
+alias dvtm="dvtm -m '^f'"
 
 # python3 is too dificult to type # {{{1
 alias python="python3"
