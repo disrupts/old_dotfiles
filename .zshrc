@@ -52,9 +52,9 @@ antigen bundle robbyrussell/oh-my-zsh lib/
 #antigen use oh-my-zsh # DON'T KNOW IF THIS IS BETTER THAN PREVIOUS
 
 # solve grep color with BSD grep
-if [[ $CURRENT_OS == 'OpenBSD' ]]; then
-  alias grep="/usr/bin/grep"
-fi
+# if [[ $CURRENT_OS == 'OpenBSD' ]]; then
+  unalias grep
+# fi
 
 # Themes ########################## {{{1
 antigen theme af-magic
@@ -113,7 +113,9 @@ antigen apply
 # Load bundle config ############## {{{1
 # no need if neither zsh-history-substring-search
 # nor zsh-autosuggestions are loaded
-# source ~/.zshbundleconf
+if [[ $ZSH_PLUGIN_HIST_SUBSTRING == 1 || $ZSH_PLUGIN_AUTOSUGG == 1 ]]; then
+  source ~/.zshbundleconf
+fi
 
 # Set ZLE extra settings ########## {{{1
 set -o INTERACTIVE_COMMENTS

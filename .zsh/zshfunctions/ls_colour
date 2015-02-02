@@ -1,0 +1,11 @@
+# small hack to get a uniform ls for functions
+#
+# alias were better but i'm currently autoloading functions without global
+# aliases
+#
+function grep_colour() {
+  case $CURRENT_OS in
+  'OpenBSD') ls              ;;
+  *)         ls --color=auto ;; # could use colorls -G
+  esac
+}

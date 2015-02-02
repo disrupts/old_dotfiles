@@ -7,6 +7,6 @@ function any() {
     echo "any - grep for process(es) by keyword" >&2
     echo "Usage: any " >&2 ; return 1
   else
-    ps xauwww | grep_color -i "[${1[1]}]${1[2,-1]}"
+    ps xauwww | grep_colour -i "[${1[1]}]${1[2,-1]}"
   fi
 }

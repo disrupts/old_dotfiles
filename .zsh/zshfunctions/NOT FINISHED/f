@@ -1,9 +1,9 @@
-# find colored
+# find coloured
 function f() {
   case $CURRENT_OS in
   'OpenBSD') echo "ERROR. mutet NOT DEFINED FOR THIS OS." ;;
   'FreeBSD') echo "ERROR. mutet NOT DEFINED FOR THIS OS." ;;
   'MACOSX')  echo "ERROR. mutet NOT DEFINED FOR THIS OS." ;;
-  *)         find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_color -1d ;;
+  *)         find . -iregex ".*$@.*" -printf '%P\0' | xargs -r0 ls_colour -1d ;;
   esac
 }

@@ -14,16 +14,7 @@
 
 # grep & ls coloured ############## {{{1
 # makes the other function OS independent with colour enabled by default
-case $CURRENT_OS in
-'OpenBSD')
-  alias grep_color="grep"
-  alias ls_color="ls" # could use colorls -G
-  ;;
-*)
-  alias grep_color="grep --color=auto"
-  alias ls_color="ls --color=auto"
-  ;;
-esac
+autoload -Uz grep_colour ls_colour
 
 # sleep & shutdown ################ {{{1
 # There is no function for Hibernation until I find a name for it
@@ -35,7 +26,7 @@ autoload -Uz oyasuminasai
 
 # Status info (net & system) ###### {{{1
 # netinfo has been moved to .bin_scripts
-autoload -Uz status # simple status info 
+autoload -Uz status # simple status info
 
 # # RC.D daemon functions ########### {{{1
 # # defines rc function to be OS-aware
@@ -131,7 +122,7 @@ autoload -Uz 256colours new-scratch look_busy japanese-daytimes
 # 256colours:        useful to check terminal emulator compatibility
 # new-scratch:       creates a new scratch directory
 # look-busy:         random hex to look cool
-# japanese-daytimes: shows a greeting in japanese according to current time 
+# japanese-daytimes: shows a greeting in japanese according to current time
 
 # I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
 autoload -Uz n nls
