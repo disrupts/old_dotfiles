@@ -20,16 +20,25 @@ export BROWSER="firefox"
 # Setting PATH & FPATH ############ {{{1
 # PATH Elements ################### {{{2
 local MAC_HOMESCRIPTS="/Users/$USER/.bin_scripts"
-local MAC_BASIC="/usr/bin:/usr/sbin:/bin:/sbin"
+local MAC_BASIC="/usr/bin /usr/sbin /bin /sbin"
 local MAC_RUBIES="/usr/local/opt/ruby/bin"          # brew ruby gems
 local MAC_LATEX="/usr/texbin"                       # brew latex
-local MAC_BREW="/usr/local/bin:/usr/local/sbin"     # Main brew location
+local MAC_BREW="/usr/local/bin /usr/local/sbin"     # Main brew location
 local MAC_XORG="/usr/X11/bin/"                      # Xquartz & brew Xorg apps
-local MAC_PKGSRC="/Users/$USER/pkg/bin:/Users/$USER/pkg/sbin"
+local MAC_PKGSRC="/Users/$USER/pkg/bin /Users/$USER/pkg/sbin"
 
 # PATH export ##################### {{{2
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
-  export PATH="$MAC_RUBIES:$MAC_BREW:$MAC_PKGSRC:$MAC_LATEX:$MAC_BASIC:$MAC_XORG:$MAC_HOMESCRIPTS:$PATH"
+  path=( 
+    $MAC_RUBIES
+    $MAC_BREW
+    $MAC_PKGSRC
+    $MAC_LATEX
+    $MAC_BASIC
+    $MAC_XORG
+    $MAC_HOMESCRIPTS
+    "${path[@]}"
+  )
 fi
 
 # FPATH export #################### {{{2

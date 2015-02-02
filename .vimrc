@@ -80,7 +80,6 @@ vnoremap <C-V>     v
 " Shortcut to rapidly toggle `set list`          {{{2
 " nnoremap <leader>l :set list! list?<CR>
 nnoremap <leader>l :call <SID>Better_list_with_marker_and_hardwrap()<CR>
-let b:disable_SmartColumnColors = 1
 function <SID>Better_list_with_marker_and_hardwrap()
   if (&list == 0)
     set list
