@@ -5,7 +5,7 @@
 #
 function grep_colour() {
   case $CURRENT_OS in
-  'OpenBSD') ls              ;;
-  *)         ls --color=auto ;; # could use colorls -G
+  'OpenBSD') ls              $(for x; do echo $x; done) ;;
+  *)         ls --color=auto $(for x; do echo $x; done) ;; # could use colorls -G
   esac
 }

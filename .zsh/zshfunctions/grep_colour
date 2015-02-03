@@ -5,7 +5,7 @@
 #
 function grep_colour() {
   case $CURRENT_OS in
-  'OpenBSD') grep              ;;
-  *)         grep --color=auto ;;
+  'OpenBSD') grep              $(for x; do echo $x; done) ;;
+  *)         grep --color=auto $(for x; do echo $x; done) ;;
   esac
 }

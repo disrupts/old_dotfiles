@@ -4,6 +4,8 @@ from os import environ
 from subprocess import check_output
 from subprocess import Popen
 from subprocess import PIPE
+from subprocess import CalledProcessError
+from subprocess import STDOUT
 from re import compile
 from re import finditer
 from re import escape
@@ -116,21 +118,16 @@ if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
         text = joined_active_interfaces[num]
 
         index = text.index('inet')
-        ip    = ip_regex.match(text[(index+4):(index+4+13)]).group()
+        ip    = ip_regex.match(text[(index+4):(index+4+15)]).group()
 
         index   = text.index('netmask')
         netmask = text[(index+7):(index+7+10)]
 
         index     = text.index('broadcast')
-        broadcast = ip_regex.match(text[(index+9):(index+9+13)]).group()
+        broadcast = ip_regex.match(text[(index+9):(index+9+15)]).group()
 
         index = text.index('ether')
         mac   = text[(index+5):(index+5+14)]
-
-        output_route = check_output(['route','-n','get', 'duckduckgo.com'])
-        output_route = str(output_route, encoding='utf8')
-        index        = output_route.index('gateway:')
-        gateway      = ip_regex.match(output_route[(index+9):(index+9+13)]).group()
 
         net_ip = net_ip_from_netmask(ip, netmask)
 
@@ -140,14 +137,23 @@ if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
         info_dict['netmask']   = netmask
         info_dict['broadcast'] = broadcast
         info_dict['mac']       = mac
-        info_dict['gateway']   = gateway
         info_dict['net_ip']    = net_ip
 
         info_interfaces.append(info_dict)
 
 else: # Linux asumed
     print('PARSING NOT IMPLEMENTED.')
+    exit()
 
+NO_GATEWAY = False
+try:
+    # gets the default internet gateway
+    output_route = check_output(['route','-n','get', 'duckduckgo.com'], stderr=STDOUT)
+    output_route = str(output_route, encoding='utf8')
+    index        = output_route.index('gateway:')
+    gateway      = ip_regex.match(output_route[(index+9):(index+9+13)]).group()
+except CalledProcessError:
+    NO_GATEWAY = True
 
 # Get external ip
 NO_EXTERNAL_IP = False
@@ -198,7 +204,6 @@ print(full_string)
 message = {}
 message['interface'] = 'Details about: '
 message['ip']        = 'Ip Adress: '
-message['gateway']   = 'Gateway: '
 message['broadcast'] = 'Broadcast IP: '
 message['net_ip']    = 'Network IP: '
 message['netmask']   = 'Subnet Mask: '
@@ -208,7 +213,6 @@ for info in info_interfaces:
     filler = {}
     filler['interface'] = ''.join([' ' for i in range(total_length - len(info['interface']) - len(message['interface']))])
     filler['ip']        = ''.join([' ' for i in range(total_length - len(info['ip'])        - len(message['ip']       ))])
-    filler['gateway']   = ''.join([' ' for i in range(total_length - len(info['gateway'])   - len(message['gateway']  ))])
     filler['broadcast'] = ''.join([' ' for i in range(total_length - len(info['broadcast']) - len(message['broadcast']))])
     filler['net_ip']    = ''.join([' ' for i in range(total_length - len(info['net_ip'])    - len(message['net_ip']   ))])
     filler['netmask']   = ''.join([' ' for i in range(total_length - len(info['netmask'])   - len(message['netmask']  ))])
@@ -216,13 +220,20 @@ for info in info_interfaces:
 
     print(message['interface'], filler['interface'],  info['interface'], sep='')
     print(message['ip']       , filler['ip']       ,  info['ip']       , sep='')
-    print(message['gateway']  , filler['gateway']  ,  info['gateway']  , sep='')
     print(message['broadcast'], filler['broadcast'],  info['broadcast'], sep='')
     print(message['net_ip']   , filler['net_ip']   ,  info['net_ip']   , sep='')
     print(message['netmask']  , filler['netmask']  ,  info['netmask']  , sep='')
     print(message['mac']      , filler['mac']      ,  info['mac']      , sep='')
 
     print(full_string)
+
+if NO_GATEWAY == False:
+    filler = ''.join([' ' for i in range(total_length - len(gateway) - len('Default gateway: '))])
+    print('Default gateway: ', filler, gateway, sep='')
+else:
+    print('No default route established.')
+
+print(full_string)
 
 if NO_EXTERNAL_IP == False:
     filler = ''.join([' ' for i in range(total_length - len(external_ip) - len('External IP: '))])
