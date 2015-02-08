@@ -49,3 +49,6 @@
 [submodule ".vim/bundle/SmartColumnColor"]
 	path = .vim/bundle/SmartColumnColor
 	url = https://github.com/vim-scripts/SmartColumnColor.git
+[submodule ".vim/bundle/smyck-colorscheme"]
+	path = .vim/bundle/smyck-colorscheme
+	url = https://github.com/mxgrn/smyck.git
