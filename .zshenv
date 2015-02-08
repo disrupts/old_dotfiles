@@ -16,6 +16,7 @@ export SAVEHIST=10000
 # Setting default apps ############ {{{1
 export EDITOR="vim"
 export BROWSER="firefox"
+export PAGER="less"
 
 # Setting PATH & FPATH ############ {{{1
 # PATH Elements ################### {{{2
@@ -29,7 +30,7 @@ local MAC_PKGSRC="/Users/$USER/pkg/bin /Users/$USER/pkg/sbin"
 
 # PATH export ##################### {{{2
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
-  path=( 
+  path=(
     $MAC_RUBIES
     $MAC_BREW
     $MAC_PKGSRC

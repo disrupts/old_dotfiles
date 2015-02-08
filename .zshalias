@@ -8,6 +8,8 @@
 
 # main general alias ############## {{{1
 alias top='htop'
+alias less=$PAGER
+alias zless=$PAGER
 
 # Internet ######################## {{{1
 alias ip="curl --silent \"https://duckduckgo.com/?q=my+ip&ia=answer\"  \
