@@ -89,11 +89,6 @@ fi
 # Multimedia ###################### {{{1
 alias play_dvd="mplayer -vo xv dvdnav://"
 alias play="mplayer"
-function streamclip()         { mplayer $(pop) }
-function streamyt()           { youtube-dl $1 -o - | mplayer - }
-function streamyt-audio()     { youtube-dl $1 -o - | mplayer -novideo - }
-function streamytclip()       { streamyt $(pop) }
-function streamyt-audioclip() {streamyt-audio $(pop) }
 
 # dvtm changing meta key ########## {{{1
 alias dvtm="dvtm -m '^f'"

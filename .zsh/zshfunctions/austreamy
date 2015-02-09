@@ -1,0 +1,19 @@
+streamy() {
+  #local PLAYER=mplayer
+  local URL=""
+
+  if [[ $1 == "" ]] ; then    # url from clipboard
+    URL=$(pop)
+  else                        # url from $1
+    URL=$1
+  fi
+
+  YOUTUBE1=$( echo $URL | grep "youtube.com" )
+  YOUTUBE2=$( echo $URL | grep "youtu.be"    )
+
+  if [[ $YOUTUBE1 == $URL || $YOUTUBE2 == $URL ]]; then
+    youtube-dl $URL -o - | mplayer -novideo -
+  else
+    mplayer -novideo $URL
+  fi
+}

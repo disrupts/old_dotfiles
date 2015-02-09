@@ -116,6 +116,10 @@ alias Notebook=" seteq 00 75 75 70 50 50 60 70 85 85 "
 alias Disable="  seteq 66 66 66 66 66 66 66 66 66 66 "
 alias rocks="    seteq 91 67 39 36 37 47 53 63 67 75 "
 
+# Media ########################### {{{1
+autoload -Uz streamy austreamy
+# streamy:    reads url from console or clipboard and streams even from youtube
+# austreamy:  audio only version of "streamy"
 
 # Nyan ############################ {{{1
 autoload -Uz 256colours new-scratch look_busy japanese-daytimes
