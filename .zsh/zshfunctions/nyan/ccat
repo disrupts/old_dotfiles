@@ -1,0 +1,14 @@
+# mixes pygmentize & cat to get colours with no headaches
+function ccat() {
+  PCAT_OUTPUT=$(for x; do; pygmentize $x 2>&1; done)
+  PCAT_PIPED=$(echo $PCAT_OUTPUT | grep "Error: no lexer for filename")
+
+  if [[ $PCAT_PIPED != "" ]]; then
+    for x; do cat $x; done
+  else
+    echo $PCAT_OUTPUT
+  fi
+
+  unset PCAT_OUTPUT
+  unset PCAT_PIPED
+}
