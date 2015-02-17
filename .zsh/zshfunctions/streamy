@@ -1,4 +1,5 @@
-streamy() {
+# reads url from console or clipboard and streams even from youtube
+function streamy() {
   #local PLAYER=mplayer
   local URL=""
 

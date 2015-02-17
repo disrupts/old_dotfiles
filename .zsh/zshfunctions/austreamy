@@ -1,4 +1,5 @@
-streamy() {
+# audio only version of "streamy"
+function austreamy() {
   #local PLAYER=mplayer
   local URL=""
 

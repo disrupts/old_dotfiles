@@ -1,16 +1,29 @@
-# Device 0: Roland      # keys: 0, drumpad: 9
-dnew 0 "rmidi/1"    ro
-inew roland_keys    {0 0}
-inew roland_drumpad {0 9}
+# Devices 0, 1 & 2 are Roland
+# Device 0: Roland but don't know what
+# Device 1: Roland        keys: 0, drumpad: 9
+dnew 1 "rmidi/1"    ro
+inew roland_keys    {1 0}
+inew roland_drumpad {1 9}
+# Device 2: Roland sliders, knobs & play buttons
+dnew 2 "rimdi/2"    ro
 
-# Device 1: fluidsynth  # drums: 9, piano: others
-dnew 1 "midithru/0" wo
-onew fluid_piano    {1 0}
-onew fluid_drums    {1 9}
+# Devices 3 & 4 are the Yamaha
+# Device 3: Yamaha        keys: 0
+dnew 3 "rmidi/3"    ro  # rw could be used
+inew yamaha_keys    {3 0}
+# Device 4: Yamaha but don't know what
 
-# Connect Roland to fluidsynth
+# Device 5: fluidsynth    drums: 9, piano: others
+dnew 5 "midithru/0" wo
+onew fluid_piano    {5 0}
+onew fluid_drums    {5 9}
+
+# Connect Roland & Yamaha to fluidsynth
+#   Conecting with to a single instance means that pressing the same key
+#   on both keyboards will only produce one sound (as long as one is pressed)
 fnew fluidsynth
 fmap {any roland_keys}    {any fluid_piano}
+fmap {any yamaha_keys}    {any fluid_piano}
 fmap {any roland_drumpad} {any fluid_drums}
 
 # vim: set syntax=sh
