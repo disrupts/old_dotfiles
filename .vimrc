@@ -176,6 +176,9 @@ autocmd BufNewFile,BufReadPost *.h set filetype=c
 " Assembly will be understood as MIPS            {{{2
 autocmd BufNewFile,BufReadPost *.asm set filetype=MIPS
 
+" Fountain film-script detection                 {{{2
+autocmd BufNewFile,BufReadPost *.fountain set filetype=fountain
+
 " Visuals                                        {{{1
 " Colourscheme                                   {{{2
 colorscheme molokai

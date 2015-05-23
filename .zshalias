@@ -44,7 +44,7 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
   # Install and update [Homebrew] ### {{{3
   elif [[ $PKG_TOOL == 'homebrew' ]]; then
     alias update="brew update"
-    alias upgrade="brew upgrade"
+    alias upgrade="brew upgrade --all"
     alias search="brew search"
     alias binfo="brew info"
     alias get="brew install"

@@ -5,7 +5,7 @@ dnew 1 "rmidi/1"    ro
 inew roland_keys    {1 0}
 inew roland_drumpad {1 9}
 # Device 2: Roland sliders, knobs & play buttons
-dnew 2 "rimdi/2"    ro
+dnew 2 "rmidi/2"    ro
 
 # Devices 3 & 4 are the Yamaha
 # Device 3: Yamaha        keys: 0

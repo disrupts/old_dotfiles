@@ -92,6 +92,7 @@ antigen bundle cabal
 # Ruby ############################ {{{2
 antigen bundle ruby
 antigen bundle gem
+#antigen bundle rbenv
 antigen bundle bundler
 
 # Extras ########################## {{{2
@@ -121,6 +122,9 @@ fi
 set -o INTERACTIVE_COMMENTS
 setopt CORRECT
 
+# fast patch for today
+#eval "$(rbenv init -)"
+#
 # Zsh VI config ### ############### {{{1
 
 # mode, e for emacs, v for vi, #### {{{2

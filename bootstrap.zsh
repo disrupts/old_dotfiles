@@ -41,7 +41,7 @@ local FLAG_UPDATE_REPO=0
 local FLAG_UPDATE_MODULES=0
 local FLAG_HELP=0
 
-for flag in $argv; do
+for flag in $argv; do # $* is an alternate form of $argv
   case $flag in
   # checks for separate arguments
   "--force"             | "-f") FLAG_FORCE=1                              ;;
@@ -70,7 +70,8 @@ for flag in $argv; do
   esac
 done
 # if no flag is set and $1 != "" then wrong argument written
-if [[ $argct>0 && $FLAG_FORCE==0 && $FLAG_UPDATE_REPO==0 && $FLAG_UPDATE_MODULES==0 ]]; then
+if [[ ($#>0) && ($FLAG_FORCE==0) && ($FLAG_UPDATE_REPO==0) &&
+      ($FLAG_UPDATE_MODULES==0) ]]; then
   FLAG_HELP=1
 fi
 

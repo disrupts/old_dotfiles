@@ -52,3 +52,6 @@
 [submodule ".vim/bundle/smyck-colorscheme"]
 	path = .vim/bundle/smyck-colorscheme
 	url = https://github.com/mxgrn/smyck.git
+[submodule ".vim/bundle/fountain"]
+	path = .vim/bundle/fountain
+	url = https://github.com/vim-scripts/fountain.vim
