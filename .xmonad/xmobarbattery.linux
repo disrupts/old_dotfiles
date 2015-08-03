@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+BAT_LEVEL=$(cat /sys/class/power_supply/BAT0/capacity)
+
+ICE="#e0ffff"
+GREEN="#00ff00"
+TURQUOISE="#00ffff"
+YELLOW="#ffff00"
+ORANGE="#ff4400"
+RED="#ff0000"
+
+if [ $BAT_LEVEL -lt 10 ]; then
+  echo -n "Bat: <fc=$RED>$BAT_LEVEL</fc>%"
+elif [ $BAT_LEVEL -lt 20 ]; then
+  echo -n "Bat: <fc=$ORANGE>$BAT_LEVEL</fc>%"
+elif [ $BAT_LEVEL -lt 30 ]; then
+  echo -n "Bat: <fc=$YELLOW>$BAT_LEVEL</fc>%"
+elif [ $BAT_LEVEL -lt 70 ]; then
+  echo -n "Bat: <fc=$TURQUOISE>$BAT_LEVEL</fc>%"
+elif [ $BAT_LEVEL -gt 98 ]; then
+  echo -n "Bat: <fc=$ICE>$BAT_LEVEL</fc>%"
+else
+  echo -n "Bat: <fc=$GREEN>$BAT_LEVEL</fc>%"
+fi
+
+# unset -v ICE

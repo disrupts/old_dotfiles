@@ -1,0 +1,77 @@
+#!/usr/bin/env sh
+# vim: nowrap fdm=marker
+
+# Choose stuff ----------------------------------- {{{1
+# Choose keyboard layout ------------------------- {{{2
+KEYBOARD_LAYOUT='es'
+
+# Choose Remove or Swap ctrl-caps ---------------- {{{2
+# $CTRL_CAPS='SWAP' or $CTRL_CAPS='NOCAPS'
+CTRL_CAPS='NOCAPS' 
+
+# Do stuff --------------------------------------- {{{1
+# Set Keyboard Layout ---------------------------- {{{2
+if [ $CURRENT_OS = 'OpenBSD' ]; then
+  wsconsctl keyboard.encoding=$KEYBOARD_LAYOUT 
+elif [ $CURRENT_OS = 'Linux' ]; then
+  setxkbmap $KEYBOARD_LAYOUT # works on BSD too
+fi
+
+# Set CTRL-ALT-BKSP to exit X -------------------- {{{2
+setxkbmap -option terminate:ctrl_alt_bksp
+setxkbmap -option shift:both_capslock_cancel
+
+# Swap Caps -------------------------------------- {{{2
+if [ $CTRL_CAPS = 'SWAP' ]; then
+  if [ $CURRENT_OS = 'OpenBSD' ]; then
+    wsconsctl keyboard.encoding=us.swapctrlcaps
+  elif [ $CURRENT_OS = 'Linux' ]; then
+    setxkbmap -option ctrl:swapcaps # works on BSD too
+  fi
+fi
+
+# Remove Caps ------------------------------------ {{{2
+if [ $CTRL_CAPS = 'NOCAPS' ]; then
+  if [ $CURRENT_OS = 'OpenBSD' ]; then
+    wsconsctl keyboard.map+="keysym Caps_Lock = Control_L"
+  elif [ $CURRENT_OS = 'Linux' ]; then
+    setxkbmap -option caps:ctrl_modifier # works on BSD too
+  fi
+fi
+
+#  Symmetric keyboard modifiers ------------------ {{{1
+
+#  original:   Ctrl - Super - Alt - Space - AltGr - ImpPt - Ctrl
+#
+#  objective:  Ctrl - AltGr - Alt - Space -  Alt  - AltGr - Ctrl
+
+# Control_L 37   (left ctrl)
+# Control_R 108  (right ctrl)
+# Alt_L     64   (left alt)
+# Alt_R     108  (alt gr)
+# Super_L   133  (windows - super)
+# Super_R   134  (not on laptop
+# Print     107  (Print screen)
+
+if [ $CURRENT_OS = 'OpenBSD' ]; then
+  wsconsctl keyboard.map+="keycode 133=Alt_R"
+  wsconsctl keyboard.map+="keycode 107=Alt_R"
+  wsconsctl keyboard.map+="keycode 108=Alt_L"
+elif [ $CURRENT_OS = 'Linux' ]; then
+  # original "xmodmap -pke"
+  # keycode  64 = Alt_L Meta_L Alt_L Meta_L
+  # keycode 204 = NoSymbol Alt_L NoSymbol Alt_L
+  # keycode 107 = Print Sys_Req Print Sys_Req
+  # keycode 108 = ISO_Level3_Shift NoSymbol ISO_Level3_Shift
+  # keycode 133 = Super_L NoSymbol Super_L
+  # keycode 134 = Super_R NoSymbol Super_R
+
+  # modded
+  xmodmap -e "keycode 107 = ISO_Level3_Shift NoSymbol ISO_Level3_Shift" # Print -> Alt_R
+  xmodmap -e "keycode 108 = Alt_L Meta_L Alt_L Meta_L"                  # Alt_R -> Alt
+  xmodmap -e "keycode 133 = ISO_Level3_Shift NoSymbol ISO_Level3_Shift" # Super_L -> Alt_R
+fi
+
+# Unset variables -------------------------------- {{{1
+unset -v KEYBOARD_LAYOUT
+unset -v CTRL_CAPS

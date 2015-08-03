@@ -16,7 +16,7 @@ if [[ $CURRENT_OS == '' ]]; then
   # OS specific detections ########## {{{2
   if [[ $CURRENT_OS == 'OpenBSD' ]]; then
     # NOT TESTED BRANCH DETECTION
-    local KERNEL_VERSION=`sysctl | grep kern.version | grep -oE "(beta)"`
+    local KERNEL_VERSION=`sysctl | grep kern.version | grep -oE "(beta)"`
     if [[ $KERNEL_VERSION == "beta" ]]; then
       export BRANCH='current'
     else

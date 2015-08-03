@@ -44,7 +44,7 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
   # Install and update [Homebrew] ### {{{3
   elif [[ $PKG_TOOL == 'homebrew' ]]; then
     alias update="brew update"
-    alias upgrade="brew upgrade"
+    alias upgrade="brew upgrade --all"
     alias search="brew search"
     alias binfo="brew info"
     alias get="brew install"
@@ -78,12 +78,25 @@ elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
   alias get="pkg_add -i"
   alias forget="pkg_delete"
   alias purge="pkg_delete -a"
+
+# Linux -> Debian ################# {{{2
+elif [[ $CURRENT_OS == 'Linux' ]]; then
+  if [[ $DISTRO == 'Debian' ]]; then
+    alias update="sudo aptitude update"
+    alias upgrade="sudo aptitude safe-upgrade"
+    alias search="aptitude search"
+    alias get="sudo aptitude install"
+    alias forget="sudo aptitude purge"
+  fi
 fi
 
 # Copy & Paste #################### {{{1
 if [[ $CURRENT_OS == 'MACOSX' ]]; then
   alias pop="pbpaste"
   alias push="pbcopy"
+elif [[ $CURRENT_OS == 'Linux' || $CURRENT_OS == 'OpenBSD' ]]; then
+  alias pop="xsel"
+  alias push="xsel"
 fi
 
 # Multimedia ###################### {{{1

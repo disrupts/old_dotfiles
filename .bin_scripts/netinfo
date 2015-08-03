@@ -42,6 +42,9 @@ CURRENT_OS = environ["CURRENT_OS"]
 # Calls ifconfig
 output_ifconfig = check_output(['ifconfig'])
 output_ifconfig = str(output_ifconfig, encoding='utf8')
+if CURRENT_OS == 'Linux': # there's no other way to diferentiate active interfaces
+    output_ifconfig_all = check_output(['ifconfig','-a'])
+    output_ifconfig_all = str(output_ifconfig_all, encoding='utf8')
 
 
 # Separates output into list of interface paragraphs
@@ -80,10 +83,12 @@ if CURRENT_OS == 'MACOSX' or CURRENT_OS == 'FreeBSD' or CURRENT_OS == 'OpenBSD':
 else: # LINUX asumed
     paragraphs = output_ifconfig.split('\n\n')
     lines = []
-    for paragraph in paragraphs:
-        lines = pargraph.split('\n')
+    for elem in range(len(paragraphs)):
+        paragraphs[elem] = paragraphs[elem].split('\n')
+        print(paragraphs[elem], '...')
     interfaces = []
     for line in lines:
+        print(line)
         print('PARSING NOT IMPLEMENTED.')
 
 

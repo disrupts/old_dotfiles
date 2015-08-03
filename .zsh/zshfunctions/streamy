@@ -13,7 +13,7 @@ function streamy() {
   YOUTUBE2=$( echo $URL | grep "youtu.be"    )
 
   if [[ $YOUTUBE1 == $URL || $YOUTUBE2 == $URL ]]; then
-    youtube-dl $URL -o - | mplayer -
+    youtube-dl $URL -f best -o - | mplayer -
   else
     mplayer $URL
   fi

@@ -1,15 +1,24 @@
+!Xcursor.size: 64
+
+! Fake Transparency
+! URxvt*.transparent: true
+! URxvt*.shading: 30 
+
+! True Transparency with compositor
 URxvt*.depth: 32
-!URxvt*.background: rgba:3333/bbbb/1111/bbbb good for when ill run a composite manager (xcompmgr, dcompmgr, compiz...)
-URxvt*.transparent: true
-URxvt*.shading: 30 
+URxvt*.background: [80]#050510
+! URxvt*.background: [90]#ffffff
+! URxvt*.blurRadius: 100x100 ! causes problems with compton
+
 
 URxvt*.scrollBar: false
-URxvt*.font: xft:Inconsolata:size=8:antialias=true
+URxvt*.font: xft:Inconsolata:size=20:antialias=true
 
 !-*-{ Xft settings
-Xft*dpi:	96
-Xft*antialias:	True
-Xft*hinting:	Full
+Xft*dpi:        96
+! Should DPI have a higher value for this screen
+Xft*antialias:  True
+Xft*hinting:    Full
 !-*-}
 
 *foreground: #c8c8c8
@@ -40,6 +49,8 @@ Xft*hinting:	Full
 *color15: #efefef
 
 !loading links in browser
-URxvt.perl-ext-common: 	default,matcher
-URxvt.url-launcher:	    /usr/local/bin/firefox
-URxvt.matcher.button:	1
+URxvt.perl-ext-common:    default,matcher,clipboard
+URxvt.clipboard.autocopy: true
+!URxvt.url-launcher:       /usr/local/bin/firefox
+URxvt.url-launcher:       firefox
+URxvt.matcher.button:     1

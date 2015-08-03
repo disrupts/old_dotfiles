@@ -2,6 +2,14 @@
 function mutet() {
   case $CURRENT_OS in
   'OpenBSD')  mixerctl outputs.master.mute=toggle ;;
+  'Linux')
+    local mute_status="$(amixer -c 1 get Master | grep "Mono:" | awk '{print $6}')"
+    if [[ $mute_status == '[on]' ]]; then
+      amixer -c 1 set Master mute
+    else
+      amixer -c 1 set Master unmute
+    fi
+    ;;
   *)          echo "ERROR. mutet NOT DEFINED FOR THIS OS."
   esac
 }

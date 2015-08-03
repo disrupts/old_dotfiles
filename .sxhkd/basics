@@ -1,0 +1,15 @@
+alt + shift + Return
+  urxvtc
+
+alt + space
+  dmenu_run
+
+# Sound
+XF86AudioLowerVolume
+  amixer -c 1 set Master 5%-
+
+XF86AudioRaiseVolume
+  amixer -c 1 set Master 5%+
+
+XF86AudioMute
+  mutet
