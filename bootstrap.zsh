@@ -15,7 +15,7 @@ function reload_zsh() {
 }
 function sync_dotfiles() {
   rsync --exclude ".git/" --exclude ".DS_Store" --exclude "bootstrap.zsh" \
-        --exclude "README.md"  -av --no-perms . ~
+        --exclude ".gitmodules" --exclude "README.md"  -av --no-perms . ~
 }
 function print_help() {
   echo "usage: bootstrap [--force][-f] [--help][-h]"
