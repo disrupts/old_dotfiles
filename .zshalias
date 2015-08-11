@@ -57,7 +57,7 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
 
 # OpenBSD ######################### {{{2
 elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
-  alias pkg_search="curl $PKG_PATH\index.txt | grep_color"
+  alias pkg_search="curl --silent $PKG_PATH/index.txt | grep_colour"
   function pkg_update() {
     # Update ports via AnonCVS
     cd /usr/ports
