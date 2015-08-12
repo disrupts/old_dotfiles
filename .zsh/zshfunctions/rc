@@ -1,8 +1,10 @@
 function rc() {
+  # $1: start, stop, restart, ...
+  # $2: the service
   case $CURRENT_OS in
   'Linux')
     case $DISTRO in
-    'Debian') systemctl $1 $2 ;; # Debian based, including Ubuntu
+    'Debian') systemctl $1 $2 ;; # Debian based, including Ubuntu (systemd)
     *) service $2 $1          ;; # System V init scripts
     esac
     ;;
