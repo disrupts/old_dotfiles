@@ -1,9 +1,13 @@
 function rc() {
   case $CURRENT_OS in
-  #'Ubuntu')  service $2 $1
-  #'Systemd') systemctl $1 $2
+  'Linux')
+    case $DISTRO in
+    'Debian') systemctl $1 $2 ;; # Debian based, including Ubuntu
+    *) service $2 $1          ;; # System V init scripts
+    esac
+    ;;
   #'FreeBSD') sysrc $something $something
-  'MACOSX') launchctl $1 $2;;
-  *)        /etc/rc.d/$2 $1;;
+  'MACOSX') launchctl $1 $2 ;;
+  *)        /etc/rc.d/$2 $1 ;;
   esac
 }
