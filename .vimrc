@@ -162,7 +162,9 @@ nnoremap <leader>u :GundoToggle<CR>
 " Tab config for every file                      {{{2
 "   * 2 chars softabs
 "   * 4 chars hardtabs
-set ts=4 sts=2 sw=2 noexpandtab
+" set ts=4 sts=2 sw=2 noexpandtab
+" New plans, let's try to live without tabs
+set ts=4 sts=4 sw=4 expandtab
 " This one will be used on C, C++ files!
 
 " FileType detection                             {{{1

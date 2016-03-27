@@ -23,6 +23,7 @@ Xft*hinting:    Full
 
 *foreground: #c8c8c8
 
+!default colourscheme
 !black
 *color0:  #251f1f
 *color8:  #5e5e5e

@@ -13,9 +13,9 @@ alias zless=$PAGER
 
 # Internet ######################## {{{1
 alias ip="curl --silent \"https://duckduckgo.com/?q=my+ip&ia=answer\"  \
-        | grep -oE \"(Your IP address is ([0-9]+\.){3}[0-9]+)\"        \
-        | grep -oE \"(([0-9]+\.){3}[0-9]+)\"" # could be "| cut -d ' ' -f5"
-alias who="lsof -P -i -n"
+        | grep -oE \"(Your IP address is ([0-9]+\.){3}[0-9]+)\"        \
+        | grep -oE \"(([0-9]+\.){3}[0-9]+)\"" # could be "| cut -d ' ' -f5"
+alias whom="lsof -P -i -n"
 alias ping='ping -c 5'
 alias pingnodns='ping -c 5 8.8.8.8'
 alias pinggoo='ping -c 5 www.google.com'
@@ -57,7 +57,7 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
 
 # OpenBSD ######################### {{{2
 elif [[ $CURRENT_OS == 'OpenBSD' ]]; then
-  alias pkg_search="curl --silent $PKG_PATH/index.txt | grep_colour"
+  alias pkg_search="curl $PKG_PATH\index.txt | grep_color"
   function pkg_update() {
     # Update ports via AnonCVS
     cd /usr/ports
@@ -87,6 +87,7 @@ elif [[ $CURRENT_OS == 'Linux' ]]; then
     alias search="aptitude search"
     alias get="sudo aptitude install"
     alias forget="sudo aptitude purge"
+    alias purge="sudo aptitude purge"
   fi
 fi
 

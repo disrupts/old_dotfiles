@@ -1,0 +1,6 @@
+# gets the location from open.mapquest.com via duckduckgo
+function whereami() {
+  curl --silent "https://duckduckgo.com/?q=my+ip&ia=answer" \
+  | awk '{print $281}' | cut -d '=' -f 3 | cut -d '\' -f 1   \
+  | sed -e "s/%2C/,/g" | sed -e "s/%20/ /g"
+}

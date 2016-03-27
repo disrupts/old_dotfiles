@@ -11,5 +11,10 @@ XF86AudioLowerVolume
 XF86AudioRaiseVolume
   amixer -c 1 set Master 5%+
 
-XF86AudioMute
-  mutet
+#XF86AudioMute
+#  mutet
+#  its a zsh function, so no good -> should move stuff to sh
+
+# Screen backlight
+XF86MonBrightness{Up,Down}
+  backlight {+,-}5%

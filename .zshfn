@@ -122,12 +122,17 @@ autoload -Uz streamy austreamy
 # austreamy:  audio only version of "streamy"
 
 # Nyan ############################ {{{1
-autoload -Uz 256colours new-scratch look_busy japanese-daytimes ccat
+autoload -Uz 256colours new-scratch look_busy japanese-daytimes ccat whereami
 # 256colours:        useful to check terminal emulator compatibility
 # new-scratch:       creates a new scratch directory
 # look-busy:         random hex to look cool
 # japanese-daytimes: shows a greeting in japanese according to current time
 # ccat:              coloured cat via pygmentize
+# whereami:          ip based location from open.mapquest.com via duckduckgo
 
 # I SHOULD CHECK HOW TO USE IT, SEEMS USEFUL
 autoload -Uz n nls
+
+
+autoload -Uz calc
+

@@ -20,7 +20,7 @@ export PAGER="less"
 
 # Setting PATH & FPATH ############ {{{1
 # PATH Elements ################### {{{2
-local MAC_HOMESCRIPTS="/Users/$USER/.bin_scripts"
+local HOMESCRIPTS="$HOME/.bin_scripts"
 local MAC_BASIC="/usr/bin /usr/sbin /bin /sbin"
 local MAC_RUBIES="/usr/local/opt/ruby/bin"          # brew ruby gems
 local MAC_LATEX="/usr/texbin"                       # brew latex
@@ -37,7 +37,12 @@ if [[ $CURRENT_OS == 'MACOSX' ]]; then
     $MAC_LATEX
     $MAC_BASIC
     $MAC_XORG
-    $MAC_HOMESCRIPTS
+    $HOMESCRIPTS
+    "${path[@]}"
+  )
+else;
+  path=(
+    $HOMESCRIPTS
     "${path[@]}"
   )
 fi

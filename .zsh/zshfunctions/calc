@@ -1,0 +1,5 @@
+# simple calculator
+#   just an echo to bc
+function() {
+  echo $@ | bc
+}

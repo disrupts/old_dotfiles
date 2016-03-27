@@ -7,8 +7,10 @@ export LC_CTYPE="en_GB.UTF-8"
 #[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 xrdb -merge ~/.Xresources
 
+###### NEW TESTING #######
 # Add fonts
 # xset +fp ~/.fonts/*
+###########################
 
 # set the cursor & default background
 xsetroot -cursor_name left_ptr -solid steelblue
@@ -28,6 +30,7 @@ feh --bg-fill  ~/.background
 #DISPLAY=$HOST:1 bgs ~/.background &
 
 # start redshift
+# NEED TO CHECK IF IT'S ALREADY RUNNING
 redshift -c ~/.redshift &
 
 # start flexget

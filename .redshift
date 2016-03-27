@@ -1,6 +1,6 @@
 [redshift]
 temp-day=6500k
-temp-night=2400
+temp-night=2300k
 
 ; smooth transition
 transition=1
